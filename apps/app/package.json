@@ -1,9 +1,9 @@
 {
   "name": "app",
-  "main": "expo-router/entry",
+  "main":"./index.ts",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
+    "dev": "expo start --clear",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
