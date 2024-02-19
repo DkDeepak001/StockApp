@@ -11,8 +11,8 @@
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
-    "generate":"pnpm with-env drizzle-kit  generate:pg",
-    "migrate":"pnpm generate && cd ./src/ && node ./migrate.js",
+    "generate": "pnpm with-env drizzle-kit  generate:pg",
+    "migrate": "pnpm generate && cd ./src/ && node ./migrate.js",
     "push": "pnpm with-env drizzle-kit push:pg",
     "studio": "pnpm with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit",
@@ -22,24 +22,22 @@
     "@neondatabase/serverless": "^0.8.1",
     "@planetscale/database": "^1.16.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.29.3"
+    "drizzle-orm": "^0.29.3",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
-    "@stockHub/eslint-config": "*",
-    "@stockHub/typescript-config": "*",
+    "@stockHub/eslint": "*",
+    "@stockHub/typescript": "*",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.20.14",
     "eslint": "^8.56.0",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   },
-  
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@stockHub/eslint-config/base"
+      "@stockHub/eslint/base"
     ]
   }
-
 }
-
