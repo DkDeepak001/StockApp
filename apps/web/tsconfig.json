@@ -3,25 +3,19 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     },
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "incremental": true,
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "allowJs": true,
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": [
-    ".",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": [".", ".next/types/**/*.ts", "postcss.config.cjs"],
+  "exclude": ["node_modules"]
 }
