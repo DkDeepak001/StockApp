@@ -2,11 +2,16 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "build": "pnpm with-env next build",
+    "clean": "git clean -xdf .next .turbo node_modules",
+    "dev": "pnpm with-env next dev",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
+    "start": "pnpm with-env next start",
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "react": "^18",
@@ -29,5 +34,13 @@
     "@stockHub/typescript": "*",
     "@stockHub/eslint": "*",
     "@stockHub/tailwind": "*"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@stockHub/eslint/base",
+      "@stockHub/eslint/nextjs",
+      "@stockHub/eslint/react"
+    ]
   }
 }
