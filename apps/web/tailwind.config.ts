@@ -20,7 +20,7 @@ import type { Config } from "tailwindcss";
 // export default config;
 //
 
-import { fontFamily } from "tailwindcss/defaultTheme";
+import { fontFamily } from "tailwindcss/defaultTheme.js";
 
 import baseConfig from "@stockHub/tailwind/web";
 
@@ -38,4 +38,3 @@ export default {
     },
   },
 } satisfies Config;
-

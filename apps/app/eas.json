@@ -4,12 +4,12 @@
   },
   "build": {
     "base": {
-      "node": "18.16.1",
       "ios": {
         "resourceClass": "m-medium"
       }
     },
     "development": {
+      "node": "18.17.0",
       "extends": "base",
       "developmentClient": true,
       "distribution": "internal"
@@ -29,4 +29,3 @@
     "production": {}
   }
 }
-

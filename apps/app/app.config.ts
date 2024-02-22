@@ -1,9 +1,10 @@
 import type { ExpoConfig } from "expo/config";
 
 const defineConfig = (): ExpoConfig => ({
-  name: "app",
-  slug: "app",
+  name: "stockapp",
+  slug: "stockapp",
   version: "1.0.0",
+  owner: "dk_deepak",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: "myapp",
@@ -11,28 +12,34 @@ const defineConfig = (): ExpoConfig => ({
   splash: {
     image: "./assets/images/splash.png",
     resizeMode: "contain",
-    backgroundColor: "#ffffff"
+    backgroundColor: "#ffffff",
   },
   assetBundlePatterns: [" **/* "],
   ios: {
-    supportsTablet: true
+    bundleIdentifier: "com.stockapp",
+    supportsTablet: true,
   },
   android: {
+    package: "com.stockapp",
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
-      backgroundColor: "#ffffff"
-    }
+      backgroundColor: "#ffffff",
+    },
+  },
+  extra: {
+    eas: {
+      projectId: "ca406790-6e94-43b0-ae96-86455b9121c4",
+    },
   },
   web: {
     bundler: "metro",
     output: "static",
-    favicon: "./assets/images/favicon.png"
+    favicon: "./assets/images/favicon.png",
   },
-  plugins: ['expo-router'],
+  plugins: ["expo-router"],
   experiments: {
     typedRoutes: true,
     tsconfigPaths: true,
-  }
-})
+  },
+});
 export default defineConfig;
-
