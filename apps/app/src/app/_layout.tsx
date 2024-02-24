@@ -4,6 +4,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
+import { TRPCProvider } from "~/utils/api";
 
 export default function RootLayout() {
   return <RootLayoutNav />;
@@ -11,11 +12,13 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={true ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-    </ThemeProvider>
+    <TRPCProvider>
+      <ThemeProvider value={true ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </ThemeProvider>
+    </TRPCProvider>
   );
 }

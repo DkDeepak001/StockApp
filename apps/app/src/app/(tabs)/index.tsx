@@ -2,8 +2,11 @@ import { StyleSheet } from "react-native";
 
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "react-native";
+import { api } from "~/utils/api";
 
 export default function TabOneScreen() {
+  const { data } = api.auth.getSecretMessage.useQuery();
+  console.log(data);
   return (
     <View className="">
       <Text className="text-white">Tab One</Text>
