@@ -9,13 +9,17 @@
       {
         "name": "next"
       }
-    ],
-    "incremental": true,
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "allowJs": true,
-    "noEmit": true,
-    "jsx": "preserve"
+    ]
   },
-  "include": [".", ".next/types/**/*.ts", "postcss.config.cjs"],
+  "include": [
+    ".",
+    ".next/types/**/*.ts",
+    "postcss.config.cjs",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.mjs"
+  ],
   "exclude": ["node_modules"]
 }

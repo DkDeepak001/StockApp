@@ -1,0 +1,8 @@
+{
+  "extends": "@stockHub/typescript/base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+  },
+  "include": ["src", "index.ts"],
+  "exclude": ["node_modules"]
+}
