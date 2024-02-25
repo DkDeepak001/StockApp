@@ -11,12 +11,13 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
+    "dev":"yarn run studio",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
-    "generate": "pnpm with-env drizzle-kit  generate:pg",
-    "migrate": "pnpm generate && cd ./src/ && node ./migrate.js",
-    "push": "pnpm with-env drizzle-kit push:pg",
-    "studio": "pnpm with-env drizzle-kit studio",
+    "generate": "yarn with-env drizzle-kit  generate:pg",
+    "migrate": "yarn generate && cd ./src/ && node ./migrate.js",
+    "push": "yarn with-env drizzle-kit push:pg",
+    "studio": "yarn with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },

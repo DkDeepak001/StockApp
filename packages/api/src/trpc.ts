@@ -24,8 +24,8 @@ import { db } from "@stockHub/db"
  */
 
 type CreateContextOptions = {
-//   token?: string
-//   session: Session | null
+  //   token?: string
+  //   session: Session | null
 }
 
 // const serviceAccount = JSON.parse(
@@ -51,7 +51,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     // session: opts.session,
     // token: opts.token,
-    // prisma,
+    db,
     // logsDB,
   }
 }
@@ -64,7 +64,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { req, res } = opts
   // Get the session from the server using the unstable_getServerSession wrapper function
-//   const session = await getServerSession({ req, res })
+  //   const session = await getServerSession({ req, res })
 
   return createInnerTRPCContext({
     // session,
@@ -124,20 +124,20 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   // }
   //
 
-//   if (!ctx.token && !ctx.session?.user && !ctx.session?.user?.accessToken) {
-//     throw new TRPCError({ code: "UNAUTHORIZED" })
-//   }
+  //   if (!ctx.token && !ctx.session?.user && !ctx.session?.user?.accessToken) {
+  //     throw new TRPCError({ code: "UNAUTHORIZED" })
+  //   }
 
   return next({
     ctx: {
       // infers the `session` as non-nullable
-    //   session: {
-    //     ...ctx.session,
-    //     token: ctx.token || ctx.session?.user.accessToken || "",
-    //     firebaseUser: ctx.token
-    //       ? await admin.auth().verifyIdToken(ctx.token)
-    //       : undefined,
-    //   },
+      //   session: {
+      //     ...ctx.session,
+      //     token: ctx.token || ctx.session?.user.accessToken || "",
+      //     firebaseUser: ctx.token
+      //       ? await admin.auth().verifyIdToken(ctx.token)
+      //       : undefined,
+      //   },
     },
   })
 })

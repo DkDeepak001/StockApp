@@ -1,8 +1,9 @@
+import { schema } from "@stockHub/db";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const authRouter = createTRPCRouter({
   getSession: publicProcedure.query(({ ctx }) => {
-    return "this is auth";
+    return ctx.db.select().from(schema.users).limit(1);
   }),
   getSecretMessage: protectedProcedure.query(() => {
     // testing type validation of overridden next-auth Session in @cap10/auth package
