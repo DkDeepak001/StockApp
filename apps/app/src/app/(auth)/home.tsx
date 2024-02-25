@@ -8,7 +8,8 @@ import { useRouter } from "expo-router";
 
 export default function TabOneScreen() {
   const router = useRouter()
-  const { data } = api.auth.getSession.useQuery();
+  const { data } = api.auth.getSecretMessage.useQuery();
+  console.log(data)
   const { signOut } = useAuth()
   const handleLogout = () => {
     console.log("logout")

@@ -10,6 +10,7 @@ import { createTRPCReact } from "@trpc/react-query";
 import superjson from "superjson";
 import Constants from "expo-constants";
 import { type AppRouter } from "@stockHub/api";
+import { useAuth } from "@clerk/clerk-expo";
 
 /**
  * A set of typesafe hooks for consuming your API.
@@ -34,7 +35,7 @@ const getBaseUrl = () => {
   const localhost = urlString?.slice(0, 3).join("/");
   console.log(localhost);
   if (!localhost) {
-    return "https://admin.con10tlabs.com";
+    // return "https://admin.con10tlabs.com";
   }
   //   return "https://admin.con10tlabs.com";
   return `http://${urlString?.[2]?.split(":")[0]}:3000`;
@@ -50,6 +51,8 @@ export const TRPCProvider: React.FC<{ children: React.ReactNode }> = ({
   const asyncStoragePersister = createAsyncStoragePersister({
     storage: AsyncStorage,
   });
+  const { getToken } = useAuth();
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -67,8 +70,9 @@ export const TRPCProvider: React.FC<{ children: React.ReactNode }> = ({
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
           async headers() {
+            const authToken = await getToken();
             return {
-              //   authorization: await auth().currentUser?.getIdToken(true),
+              Authorization: authToken ?? undefined,
             };
           },
         }),
