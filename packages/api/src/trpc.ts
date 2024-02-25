@@ -10,7 +10,7 @@ import { TRPCError, initTRPC } from "@trpc/server"
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next"
 import superjson from "superjson"
 import { ZodError } from "zod"
-
+import { SignedInAuthObject, SignedOutAuthObject, getAuth, } from '@clerk/nextjs/server'
 import { db } from "@stockHub/db"
 
 /**
@@ -24,19 +24,10 @@ import { db } from "@stockHub/db"
  */
 
 type CreateContextOptions = {
-  //   token?: string
-  //   session: Session | null
+  auth: SignedInAuthObject | SignedOutAuthObject;
+
 }
 
-// const serviceAccount = JSON.parse(
-//   process.env.FIREBASE_SERVICE_ACCOUNT_KEY!,
-// ) as string
-
-// if (admin.apps.length === 0) {
-//   admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount),
-//   })
-// }
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
  * it, you can export it from here
@@ -49,10 +40,8 @@ type CreateContextOptions = {
 
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
-    // session: opts.session,
-    // token: opts.token,
     db,
-    // logsDB,
+    auth: opts.auth
   }
 }
 
@@ -61,14 +50,17 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  * process every request that goes through your tRPC endpoint
  * @link https://trpc.io/docs/context
  */
+
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { req, res } = opts
   // Get the session from the server using the unstable_getServerSession wrapper function
-  //   const session = await getServerSession({ req, res })
-
+  // if (!req.headers.authorization) {
+  //   console.log("invalid request without auth")
+  // }
   return createInnerTRPCContext({
     // session,
-    token: req.headers.authorization,
+    // token: req.headers.authorization,
+    auth: getAuth(req)
   })
 }
 
@@ -119,9 +111,9 @@ export const publicProcedure = t.procedure
  * procedure
  */
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  // if (!ctx.session?.user) {
-  //   throw new TRPCError({ code: "UNAUTHORIZED" });
-  // }
+  if (!ctx.auth.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
   //
 
   //   if (!ctx.token && !ctx.session?.user && !ctx.session?.user?.accessToken) {
@@ -131,13 +123,7 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      //   session: {
-      //     ...ctx.session,
-      //     token: ctx.token || ctx.session?.user.accessToken || "",
-      //     firebaseUser: ctx.token
-      //       ? await admin.auth().verifyIdToken(ctx.token)
-      //       : undefined,
-      //   },
+      session: ctx.auth
     },
   })
 })

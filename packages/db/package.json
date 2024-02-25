@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "dev":"yarn run studio",
+    "dev": "yarn run studio",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "generate": "yarn with-env drizzle-kit  generate:pg",
