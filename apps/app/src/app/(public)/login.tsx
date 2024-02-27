@@ -21,19 +21,25 @@ export default function LoginScreen() {
 
   const tryLogin = async () => {
     if (!isLoaded) return
-    const result = await signIn.create({
-      identifier: '',
-      password: "",
-    });
+    console.log("----------")
+    try {
+      const result = await signIn.create({
+        identifier: '',
+        password: "",
+      });
 
-    if (result.status === "complete") {
-      console.log(result);
-      await setActive({ session: result.createdSessionId });
-      router.replace("/home")
+      if (result.status === "complete") {
+        console.log(result);
+        await setActive({ session: result.createdSessionId });
+        router.replace("/home")
+      }
+      else {
+        console.log(result);
+      }
+    } catch (error) {
+
     }
-    else {
-      console.log(result);
-    }
+
   }
 
 

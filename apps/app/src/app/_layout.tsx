@@ -55,7 +55,7 @@ const AuthInitalizer = () => {
     if (isSignedIn && !isTabGroup) {
       router.replace("/home")
     } else {
-      router.replace("/login")
+      router.replace("/onboarding")
     }
   }, [isSignedIn])
 

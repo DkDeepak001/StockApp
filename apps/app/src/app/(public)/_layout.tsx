@@ -5,6 +5,12 @@ const PublicLayout = () => {
   return (
     <Stack>
       <Stack.Screen
+        name="onboarding"
+        options={{
+          headerTitle: 'onboarding',
+        }} />
+
+      <Stack.Screen
         name="login"
         options={{
           headerTitle: 'Clerk Auth App',
@@ -13,11 +19,6 @@ const PublicLayout = () => {
         name="register"
         options={{
           headerTitle: 'Create Account',
-        }} />
-      <Stack.Screen
-        name="onboarding"
-        options={{
-          headerTitle: 'onboarding',
         }} />
     </Stack>
   );
