@@ -3,7 +3,7 @@ import { OnBoardingData, OnBoardingDataType } from '~/constants/onBoardingData';
 import { Image } from 'expo-image'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Pagination from '~/components/onboarding/pagiantion';
-import { Button } from '~/components/buttons/button';
+import { Button } from '~/components/commons/button';
 import { useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 

@@ -1,10 +1,17 @@
 import { useSignIn, useSession } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from '~/components/commons/button';
+import { FormInput } from '~/components/commons/textInput';
 export default function LoginScreen() {
   let router = useRouter()
   const { signIn, isLoaded, setActive } = useSignIn()
   const { session } = useSession()
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleLogin = async () => {
     try {
@@ -21,11 +28,12 @@ export default function LoginScreen() {
 
   const tryLogin = async () => {
     if (!isLoaded) return
-    console.log("----------")
+    console.log(email, password)
+
     try {
       const result = await signIn.create({
-        identifier: '',
-        password: "",
+        identifier: email,
+        password,
       });
 
       if (result.status === "complete") {
@@ -37,21 +45,20 @@ export default function LoginScreen() {
         console.log(result);
       }
     } catch (error) {
-
+      console.log(error.errors[0], "trylognin")
     }
 
   }
 
 
   return (
-    <View className="flex-1 justify-center items-center  bg-black">
-      <View className="flex-row gap-x-2">
-        <Pressable onPress={handleLogin} className='bg-white px-5 py-2 rounded-lg'>
-          <Text className='text-black font-bold'>login</Text>
-        </Pressable>
-        <Link href={'/register'} className='bg-sky-500 px-5 py-2 rounded-lg'><Text className='text-white'>Register</Text></Link>
-      </View>
-    </View >
+    <SafeAreaView className="flex-1 items-center justify-center">
+      <FormInput placeholder='Enter your email address' onChangeText={(text) => setEmail(text)} />
+      <FormInput placeholder='Enter Your Password' onChangeText={(text) => setPassword(text)} />
+      <Button variants='fill' onPress={handleLogin}>
+        <Text className="text-black font-bold text-lg">Login</Text>
+      </Button>
+    </SafeAreaView >
   );
 }
 

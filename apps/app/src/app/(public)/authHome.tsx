@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "~/components/buttons/button";
+import { Button } from "~/components/commons/button";
 
 export default function AuthHome() {
   const router = useRouter()
