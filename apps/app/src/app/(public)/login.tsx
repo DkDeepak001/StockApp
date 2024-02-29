@@ -5,10 +5,22 @@ import { Pressable, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
+import { LoginFormSchema, LoginScehma } from '@stockHub/validators'
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+
 export default function LoginScreen() {
   let router = useRouter()
   const { signIn, isLoaded, setActive } = useSignIn()
   const { session } = useSession()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginScehma>({
+    resolver: zodResolver(LoginFormSchema)
+  })
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -45,7 +57,7 @@ export default function LoginScreen() {
         console.log(result);
       }
     } catch (error) {
-      console.log(error.errors[0], "trylognin")
+      console.log(error.errors, "trylognin")
     }
 
   }
@@ -54,7 +66,7 @@ export default function LoginScreen() {
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
       <FormInput placeholder='Enter your email address' onChangeText={(text) => setEmail(text)} />
-      <FormInput placeholder='Enter Your Password' onChangeText={(text) => setPassword(text)} />
+      <FormInput placeholder='Enter Your Password' onChangeText={(text) => setPassword(text)} textContentType='password' />
       <Button variants='fill' onPress={handleLogin}>
         <Text className="text-black font-bold text-lg">Login</Text>
       </Button>
