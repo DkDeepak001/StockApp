@@ -12,7 +12,7 @@ const defineConfig = (): ExpoConfig => ({
   splash: {
     image: "./assets/images/splash.png",
     resizeMode: "contain",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#000000",
   },
   assetBundlePatterns: [" **/* "],
   ios: {
@@ -23,7 +23,7 @@ const defineConfig = (): ExpoConfig => ({
     package: "com.stockapp",
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
-      backgroundColor: "#ffffff",
+      backgroundColor: "#000000",
     },
   },
   extra: {

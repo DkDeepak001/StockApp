@@ -5,6 +5,7 @@ const PublicLayout = () => {
   return (
     <Stack
       screenOptions={{
+
         headerShown: false,
         contentStyle: { backgroundColor: 'black' }
       }}>

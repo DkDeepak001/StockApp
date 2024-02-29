@@ -1,5 +1,5 @@
 
-import { Slot, Stack, useRouter, useSegments } from "expo-router";
+import { Slot, SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { TRPCProvider } from "~/utils/api";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { useEffect } from "react";
@@ -7,6 +7,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import FlashMessage from "react-native-flash-message";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
+import { ThemeProvider } from "@react-navigation/native";
+
+
 export default function RootLayout() {
   return <RootLayoutNav />;
 }
@@ -31,14 +34,22 @@ const tokenCache = {
 
 function RootLayoutNav() {
   return (
-    <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
-      <TRPCProvider>
-        <SafeAreaProvider>
-          <AuthInitalizer />
-          <FlashMessage position="top" hideStatusBar={false} statusBarHeight={StatusBar.currentHeight} />
-        </SafeAreaProvider>
-      </TRPCProvider>
-    </ClerkProvider>
+    <ThemeProvider value={{
+      dark: true,
+      colors: {
+        primary: "#000",
+        background: "#000"
+      }
+    }}>
+      <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+        <TRPCProvider>
+          <SafeAreaProvider>
+            <AuthInitalizer />
+            <FlashMessage position="top" hideStatusBar={false} statusBarHeight={StatusBar.currentHeight} />
+          </SafeAreaProvider>
+        </TRPCProvider>
+      </ClerkProvider>
+    </ThemeProvider>
   );
 }
 
