@@ -1,13 +1,13 @@
 import { useSignIn, useSession } from '@clerk/clerk-expo';
-import { Link, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native'
+import { useRouter } from 'expo-router';
+import { Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
 import { LoginFormSchema, LoginScehma } from '@stockHub/validators'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { showMessage } from 'react-native-flash-message';
 
 
 export default function LoginScreen() {
@@ -17,30 +17,35 @@ export default function LoginScreen() {
   const {
     control,
     handleSubmit,
+
     formState: { errors }
   } = useForm<LoginScehma>({
     resolver: zodResolver(LoginFormSchema)
   })
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
 
-  const handleLogin = async () => {
+  const handleLogin = async (data: LoginScehma) => {
+    const { password, email } = data
     try {
-      tryLogin()
+
+      tryLogin({ password, email })
     } catch (err: any) {
       if (err.errors && err.errors.length > 0 && err.errors[0].longMessage.includes("You're currently in single session mode")) {
+        showMessage({
+          message: `Loggin out from other device`,
+          type: "info",
+        });
+
         session?.end()
-        tryLogin()
+        tryLogin({ password, email })
       }
-      console.error("error", err.errors[0].longMessage)
+      console.error("error inside login", err)
     }
 
   }
 
-  const tryLogin = async () => {
+  const tryLogin = async ({ email, password }: LoginScehma) => {
     if (!isLoaded) return
-    console.log(email, password)
 
     try {
       const result = await signIn.create({
@@ -57,6 +62,11 @@ export default function LoginScreen() {
         console.log(result);
       }
     } catch (error) {
+      showMessage({
+        message: `${error?.errors?.[0]?.longMessage
+          }`,
+        type: "danger",
+      });
       console.log(error.errors, "trylognin")
     }
 
@@ -65,9 +75,20 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
-      <FormInput placeholder='Enter your email address' onChangeText={(text) => setEmail(text)} />
-      <FormInput placeholder='Enter Your Password' onChangeText={(text) => setPassword(text)} textContentType='password' />
-      <Button variants='fill' onPress={handleLogin}>
+      <FormInput
+        placeholder='Enter your email address'
+        control={control}
+        error={errors.email?.message!}
+        name='email'
+        textContentType='emailAddress' />
+      <FormInput
+        placeholder='Enter Your Password'
+        control={control}
+        error={errors.password?.message!}
+        name='password'
+        textContentType='password'
+      />
+      <Button variants='fill' onPress={handleSubmit(handleLogin)}>
         <Text className="text-black font-bold text-lg">Login</Text>
       </Button>
     </SafeAreaView >

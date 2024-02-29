@@ -1,15 +1,12 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+
 import { Slot, Stack, useRouter, useSegments } from "expo-router";
 import { TRPCProvider } from "~/utils/api";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { useEffect } from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import FlashMessage from "react-native-flash-message";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "react-native";
 export default function RootLayout() {
   return <RootLayoutNav />;
 }
@@ -36,7 +33,10 @@ function RootLayoutNav() {
   return (
     <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
       <TRPCProvider>
-        <AuthInitalizer />
+        <SafeAreaProvider>
+          <AuthInitalizer />
+          <FlashMessage position="top" hideStatusBar={false} statusBarHeight={StatusBar.currentHeight} />
+        </SafeAreaProvider>
       </TRPCProvider>
     </ClerkProvider>
   );
