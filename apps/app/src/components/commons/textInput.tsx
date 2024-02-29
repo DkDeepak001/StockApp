@@ -17,7 +17,7 @@ export const FormInput = <T extends FieldValues>({ control, name, error, ...prop
     <Controller
       control={control}
       render={({ field: { onBlur, onChange, value } }) => (
-        <View className="w-11/12 items-center flex justify-center mb-4">
+        <View className="w-11/12 items-center flex justify-center mb-2">
           <TextInput className="w-full border border-white/50 rounded-lg py-2 px-4 font-bold text-white"
             placeholderTextColor="gray"
             onChangeText={(text) => onChange(text)}

@@ -1,11 +1,25 @@
 import { useSignUp } from '@clerk/clerk-expo';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterFormScehma, RegisterSchema } from '@stockHub/validators';
 import { Link } from 'expo-router';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Pressable, Text, TextInput, View } from 'react-native'
+import { Button } from '~/components/commons/button';
+import { FormInput } from '~/components/commons/textInput';
 
 
 export default function RegisterScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
+
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm<RegisterSchema>({
+    resolver: zodResolver(RegisterFormScehma)
+  })
 
   const [code, setCode] = useState<string>("")
 
@@ -44,19 +58,45 @@ export default function RegisterScreen() {
 
   return (
     <View className="flex-1 justify-center items-center  bg-black">
-      <View className="flex-row gap-x-2">
-        <Link href={'/login'} className='bg-sky-500 px-5 py-2 rounded-lg'><Text className='text-white'>Login</Text></Link>
-        <Pressable onPress={handleReg} className='bg-white px-5 py-2 rounded-lg'>
-          <Text className='text-black font-bold'>Register</Text>
-        </Pressable>
-      </View>
-      <View className='flex gap-y-4 my-5'>
-        <TextInput placeholder='Enter a code ' placeholderTextColor={"white"} className='text-white border border-white px-5 py-2 w-2/4' textContentType='oneTimeCode' onChangeText={text => setCode(text)} />
-        <Pressable onPress={onPressVerify} className='bg-green-200 px-5 py-2 rounded-lg'>
-          <Text className='text-black font-bold'>verify</Text>
-        </Pressable>
+      <FormInput
+        control={control}
+        placeholder='First Name'
+        name='firstName'
+        textContentType='name'
+        error={errors.firstName?.message!}
+      />
+      <FormInput
+        control={control}
+        placeholder='Last Name'
+        name='lastName'
+        textContentType='name'
+        error={errors.lastName?.message!}
+      />
+      <FormInput
+        control={control}
+        placeholder='Username'
+        name='username'
+        textContentType='username'
+        error={errors.username?.message!}
+      />
+      <FormInput
+        control={control}
+        placeholder='Email Id'
+        name='email'
+        textContentType='emailAddress'
+        error={errors.email?.message!}
+      />
+      <FormInput
+        control={control}
+        placeholder='Password'
+        name='password'
+        textContentType='password'
+        error={errors.password?.message!}
+      />
+      <Button variants='fill'>
+        <Text className='text-black font-bold text-lg tracking-wider uppercase'>Register</Text>
+      </Button>
 
-      </View>
     </View >
   );
 }

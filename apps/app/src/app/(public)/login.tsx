@@ -89,7 +89,7 @@ export default function LoginScreen() {
         textContentType='password'
       />
       <Button variants='fill' onPress={handleSubmit(handleLogin)}>
-        <Text className="text-black font-bold text-lg">Login</Text>
+        <Text className="text-black font-bold text-lg tracking-wider uppercase">Login</Text>
       </Button>
     </SafeAreaView >
   );
