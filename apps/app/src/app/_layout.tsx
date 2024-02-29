@@ -9,7 +9,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { ThemeProvider } from "@react-navigation/native";
 
-
 export default function RootLayout() {
   return <RootLayoutNav />;
 }
@@ -34,22 +33,15 @@ const tokenCache = {
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={{
-      dark: true,
-      colors: {
-        primary: "#000",
-        background: "#000"
-      }
-    }}>
-      <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
-        <TRPCProvider>
-          <SafeAreaProvider>
-            <AuthInitalizer />
-            <FlashMessage position="top" hideStatusBar={false} statusBarHeight={StatusBar.currentHeight} />
-          </SafeAreaProvider>
-        </TRPCProvider>
-      </ClerkProvider>
-    </ThemeProvider>
+    <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+      <TRPCProvider>
+        <SafeAreaProvider>
+
+          <AuthInitalizer />
+          <FlashMessage position="top" hideStatusBar={false} statusBarHeight={StatusBar.currentHeight} />
+        </SafeAreaProvider>
+      </TRPCProvider>
+    </ClerkProvider>
   );
 }
 
@@ -66,7 +58,7 @@ const AuthInitalizer = () => {
     if (isSignedIn && !isTabGroup) {
       router.replace("/home")
     } else {
-      router.replace("/onboarding")
+      router.replace("/verification")
     }
   }, [isSignedIn])
 
