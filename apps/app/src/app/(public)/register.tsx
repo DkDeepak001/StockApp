@@ -1,18 +1,16 @@
 import { useSignUp } from '@clerk/clerk-expo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormScehma, RegisterSchema } from '@stockHub/validators';
-import { Link } from 'expo-router';
-import { useState } from 'react';
+import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { Pressable, Text, TextInput, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { showMessage } from 'react-native-flash-message';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
 
 
 export default function RegisterScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
-
-
   const {
     handleSubmit,
     control,
@@ -20,24 +18,30 @@ export default function RegisterScreen() {
   } = useForm<RegisterSchema>({
     resolver: zodResolver(RegisterFormScehma)
   })
-
-  const [code, setCode] = useState<string>("")
-
-
-
-
-  const handleReg = async () => {
+  const handleReg = async ({ password, username, lastName, firstName, email }: RegisterSchema) => {
     try {
       await signUp?.create({
-        password: "",
-        emailAddress: "",
-        username: '',
-        firstName: "",
-        lastName: ""
+        password,
+        emailAddress: email,
+        username,
+        firstName,
+        lastName
+      })
+      await signUp?.prepareEmailAddressVerification({ strategy: "email_code" })
+      showMessage({
+        message: "verification Email Sent",
+        icon: "success",
+        type: 'success'
+      })
+      router.push("/verification")
+    } catch (error) {
+      showMessage({
+        // @ts-ignore
+        message: `${error?.errors[0].message}`,
+        icon: "danger",
+        type: 'danger'
       })
 
-      await signUp?.prepareEmailAddressVerification({ strategy: "email_code" })
-    } catch (error) {
       // @ts-ignore
       console.log(error?.errors[0].message)
     }
@@ -93,7 +97,7 @@ export default function RegisterScreen() {
         textContentType='password'
         error={errors.password?.message!}
       />
-      <Button variants='fill'>
+      <Button variants='fill' onPress={handleSubmit(handleReg)}>
         <Text className='text-black font-bold text-lg tracking-wider uppercase'>Register</Text>
       </Button>
 
