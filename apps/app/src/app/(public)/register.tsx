@@ -1,12 +1,14 @@
 import { useSignUp } from '@clerk/clerk-expo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormScehma, RegisterSchema } from '@stockHub/validators';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native'
 import { showMessage } from 'react-native-flash-message';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
+import RegisterImage from "../../../assets/images/auth/register.png"
 
 
 export default function RegisterScreen() {
@@ -49,6 +51,10 @@ export default function RegisterScreen() {
 
   return (
     <View className="flex-1 justify-center items-center  bg-black">
+      <View className="w-full h-2/5 ">
+        <Image source={RegisterImage} className="w-full h-full " />
+      </View>
+
       <FormInput
         control={control}
         placeholder='First Name'

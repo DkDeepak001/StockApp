@@ -1,6 +1,6 @@
 import { useSignIn, useSession } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
@@ -8,7 +8,8 @@ import { LoginFormSchema, LoginScehma } from '@stockHub/validators'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { showMessage } from 'react-native-flash-message';
-
+import LoginImage from "../../../assets/images/auth/login.png"
+import { Image } from 'expo-image';
 
 export default function LoginScreen() {
   let router = useRouter()
@@ -75,6 +76,10 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
+      <View className="w-full h-2/5 ">
+        <Image source={LoginImage} className="w-full h-full " />
+      </View>
+
       <FormInput
         placeholder='Enter your email address'
         control={control}
