@@ -65,28 +65,26 @@ export default function RegisterScreen() {
             flexGrow: 1,
             justifyContent: "center",
             alignItems: "center"
-          }
-          }
+          }}
         >
           <FormInput
             control={control}
             placeholder='First Name'
             name='firstName'
-            textContentType='name'
+            autoComplete='off'
             error={errors.firstName?.message!}
           />
           <FormInput
             control={control}
             placeholder='Last Name'
             name='lastName'
-            textContentType='name'
+            autoComplete='off'
             error={errors.lastName?.message!}
           />
           <FormInput
             control={control}
             placeholder='Username'
             name='username'
-            textContentType='username'
             error={errors.username?.message!}
           />
           <FormInput

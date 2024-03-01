@@ -36,7 +36,6 @@ function RootLayoutNav() {
     <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
       <TRPCProvider>
         <SafeAreaProvider>
-
           <AuthInitalizer />
           <FlashMessage position="top" hideStatusBar={false} statusBarHeight={StatusBar.currentHeight} />
         </SafeAreaProvider>
@@ -56,9 +55,9 @@ const AuthInitalizer = () => {
     console.log("AuthInitalizer", isSignedIn, isTabGroup, segment)
 
     if (isSignedIn && !isTabGroup) {
-      router.replace("/home")
+      router.replace("/(auth)/feed")
     } else {
-      router.replace("/verification")
+      router.replace("/onboarding")
     }
   }, [isSignedIn])
 

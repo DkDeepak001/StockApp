@@ -2,9 +2,9 @@ import { Controller, type Control, FieldValues, Path } from "react-hook-form"
 import {
   TextInputProps,
   TextInput,
+  Text,
   View
 } from "react-native"
-import { Text } from "../Themed"
 
 type FormInputType<T extends FieldValues> = TextInputProps & {
   control: Control<T, any>
@@ -25,7 +25,7 @@ export const FormInput = <T extends FieldValues>({ control, name, error, classNa
             onBlur={onBlur}
             {...props}
           />
-          <Text className="text-red-500 font-semibold self-start mt-1">{error}</Text>
+          <Text className="text-red-400 font-semibold self-start mt-1">{error}</Text>
         </View>
       )}
       name={name}
