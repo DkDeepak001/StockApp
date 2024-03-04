@@ -24,20 +24,15 @@ export default function TabLayout() {
       initialRouteName='Feed'
       safeAreaInsets={insets}
       detachInactiveScreens={false}
-
       sceneContainerStyle={{
         backgroundColor: "black",
-
       }}
-
       screenOptions={{
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, false),
         tabBarStyle: { backgroundColor: "black", paddingTop: 7, paddingBottom: 12, height: 60 },
         tabBarShowLabel: false,
-
-
       }}>
       <Tabs.Screen
         name="feed"
