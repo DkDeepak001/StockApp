@@ -15,7 +15,7 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "generate": "yarn with-env drizzle-kit  generate:pg",
-    "migrate": "yarn generate && cd ./src/ && node ./migrate.js",
+    "migrate": "yarn generate && cd ./src/ && node ./migration.js",
     "push": "yarn with-env drizzle-kit push:pg",
     "studio": "yarn with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit",
