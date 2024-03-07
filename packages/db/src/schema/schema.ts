@@ -3,20 +3,25 @@ import { integer, pgTable, serial, text, timestamp, uuid, varchar } from "drizzl
 
 
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey().notNull(),
-  userId: serial("userId").unique().notNull(),
-  createdAt: timestamp('timestamp4').defaultNow()
+  id: uuid("id").primaryKey(),
+  createdAt: timestamp('createdAt').defaultNow()
 })
 
+export const usersRelations = relations(users, ({ many }) => ({
+  posts: many(posts),
+  reactions: many(reactions)
+}))
+
+
 export const posts = pgTable("posts", {
-  id: uuid("id").primaryKey().notNull(),
+  id: uuid("id").primaryKey(),
   tittle: varchar("tittle", { length: 256 }).notNull(),
-  authorId: text('authorId').references(() => users.id),
+  authorId: text('authorId').notNull(),
   description: text("description"),
   likes: integer("likes").default(0),
   dislikes: integer("likes").default(0),
-  createdAt: timestamp('timestamp4').defaultNow(),
-  updatedAt: timestamp('timestamp4').defaultNow()
+  createdAt: timestamp('createdAt').defaultNow(),
+  updatedAt: timestamp('updatedAt').defaultNow()
 })
 
 
@@ -25,22 +30,25 @@ export const postRelations = relations(posts, ({ one, many }) => ({
     fields: [posts.authorId],
     references: [users.id]
   }),
-  likedBy: many(likes)
+  reactions: many(reactions)
 }))
 
 
-export const likes = pgTable("likedBy", {
-  id: uuid("id").primaryKey().notNull(),
-  likedBy: text("userId").references(() => users.userId),
-  postId: text("postId").references(() => posts.id)
-})
+export const reactions = pgTable("reactions", ({
+  id: uuid('id').primaryKey(),
+  postId: text("postId").notNull(),
+  userId: text("postId").notNull()
+}))
 
-export const likesRelations = relations(likes, ({ one }) => ({
+export const reactionsRelations = relations(reactions, ({ one }) => ({
   post: one(posts, {
-    fields: [likes.postId],
-    references: [posts.id]
+    references: [posts.id],
+    fields: [reactions.postId]
+  }),
+  user: one(users, {
+    references: [users.id],
+    fields: [reactions.userId]
   })
 }))
-
 
 
