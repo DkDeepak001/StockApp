@@ -5,7 +5,7 @@ import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey } 
 // Users schema
 export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
-  userId: text("userId").primaryKey().notNull(),
+  userId: text("userId").unique().notNull(),
   createdAt: timestamp('createdAt').defaultNow()
 })
 
@@ -24,7 +24,7 @@ export const posts = pgTable("posts", {
   likes: integer("likes").default(0),
   dislikes: integer("likes").default(0),
   createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
+  // updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
 })
 
 
@@ -34,7 +34,7 @@ export const postRelations = relations(posts, ({ one, many }) => ({
     references: [users.id]
   }),
   reactions: many(reactions),
-  hashtag: many(postOnHastag)
+  tags: many(postToHashTag)
 }))
 
 
@@ -48,7 +48,7 @@ export const reactions = pgTable("reactions", ({
   postId: text("postId").notNull(),
   userId: text("postId").notNull(),
   createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
+  // updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
 }))
 
 export const reactionsRelations = relations(reactions, ({ one }) => ({
@@ -64,36 +64,38 @@ export const reactionsRelations = relations(reactions, ({ one }) => ({
 
 
 // Hashtag Schema
-export const hashtag = pgTable('hashtag', {
-  id: uuid('id').primaryKey(),
-  tag: text("hashTag").notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
+export const hashTag = pgTable("hashTag", {
+  id: uuid("id").primaryKey().notNull(),
+  name: text("name").unique()
 })
 
-
-export const hashTagRelations = relations(hashtag, ({ many }) => ({
-  posts: many(postOnHastag)
+export const hashTagRelation = relations(hashTag, ({ many }) => ({
+  posts: many(postToHashTag)
 }))
 
 
-
-// Post and Hashtag join Table
-export const postOnHastag = pgTable('postOnHastag', {
-  postId: text("postId").notNull().references(() => posts.id),
-  hashtagId: text("tagId").notNull().references(() => hashtag.id)
+export const postToHashTag = pgTable("postToHashTag", {
+  postId: uuid("postId").references(() => posts.id),
+  hashTagId: uuid('tagId').references(() => hashTag.id)
 }, (t) => ({
-  pk: primaryKey({ columns: [t.hashtagId, t.postId] })
+  pk: primaryKey({ columns: [t.hashTagId, t.postId] })
 }))
 
 
-export const postOnHastagRelations = relations(postOnHastag, ({ one }) => ({
+export const postToHashTagRelation = relations(postToHashTag, ({ one }) => ({
   post: one(posts, {
-    references: [posts.id],
-    fields: [postOnHastag.postId]
+    fields: [postToHashTag.postId],
+    references: [posts.id]
   }),
-  hashtag: one(hashtag, {
-    references: [hashtag.id],
-    fields: [postOnHastag.hashtagId]
+  handTag: one(hashTag, {
+    references: [hashTag.id],
+    fields: [postToHashTag.hashTagId]
   })
 }))
+
+
+
+
+
+
+

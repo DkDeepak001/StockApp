@@ -1,9 +1,61 @@
 {
-  "id": "7bf5161b-3900-473a-ba09-cf66fda05f17",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "14147210-eac8-4d1c-99a5-1da0e7b36768",
+  "prevId": "b696e0bc-750a-4130-840a-85723b1ffbba",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "hashTag": {
+      "name": "hashTag",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "hashTag_name_unique": {
+          "name": "hashTag_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "postToHashTag": {
+      "name": "postToHashTag",
+      "schema": "",
+      "columns": {
+        "postId": {
+          "name": "postId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tagId": {
+          "name": "tagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "posts": {
       "name": "posts",
       "schema": "",

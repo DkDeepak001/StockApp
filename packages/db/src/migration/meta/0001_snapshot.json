@@ -1,9 +1,39 @@
 {
-  "id": "7bf5161b-3900-473a-ba09-cf66fda05f17",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "b696e0bc-750a-4130-840a-85723b1ffbba",
+  "prevId": "7bf5161b-3900-473a-ba09-cf66fda05f17",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "hashTag": {
+      "name": "hashTag",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "hashTag_name_unique": {
+          "name": "hashTag_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
     "posts": {
       "name": "posts",
       "schema": "",

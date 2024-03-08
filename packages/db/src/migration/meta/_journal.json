@@ -5,8 +5,43 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1709826575808,
-      "tag": "0000_simple_carlie_cooper",
+      "when": 1709893108400,
+      "tag": "0000_tired_kate_bishop",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709893408368,
+      "tag": "0001_talented_domino",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709893631307,
+      "tag": "0002_zippy_ironclad",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709893787374,
+      "tag": "0003_bright_bloodstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709893800991,
+      "tag": "0004_thin_killmonger",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1709893825979,
+      "tag": "0005_slippery_venom",
       "breakpoints": true
     }
   ]
