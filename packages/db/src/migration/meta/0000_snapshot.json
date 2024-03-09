@@ -1,9 +1,96 @@
 {
-  "id": "7bf5161b-3900-473a-ba09-cf66fda05f17",
+  "id": "2badbd48-4c7d-4e0d-9b16-a7cbc802ed58",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "hashTag": {
+      "name": "hashTag",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "hashTag_name_unique": {
+          "name": "hashTag_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "postToHashTag": {
+      "name": "postToHashTag",
+      "schema": "",
+      "columns": {
+        "postId": {
+          "name": "postId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tagId": {
+          "name": "tagId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "postToHashTag_postId_posts_id_fk": {
+          "name": "postToHashTag_postId_posts_id_fk",
+          "tableFrom": "postToHashTag",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "postId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "postToHashTag_tagId_hashTag_id_fk": {
+          "name": "postToHashTag_tagId_hashTag_id_fk",
+          "tableFrom": "postToHashTag",
+          "tableTo": "hashTag",
+          "columnsFrom": [
+            "tagId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "postToHashTag_tagId_postId_pk": {
+          "name": "postToHashTag_tagId_postId_pk",
+          "columns": [
+            "tagId",
+            "postId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "posts": {
       "name": "posts",
       "schema": "",

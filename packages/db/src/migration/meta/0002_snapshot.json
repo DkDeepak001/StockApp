@@ -1,9 +1,50 @@
 {
-  "id": "14147210-eac8-4d1c-99a5-1da0e7b36768",
-  "prevId": "b696e0bc-750a-4130-840a-85723b1ffbba",
+  "id": "a8b52046-543f-4fa1-9fee-c05e655937b3",
+  "prevId": "e4fc9b75-06b6-48ce-b7a3-7d7dac273ba4",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "comments": {
+      "name": "comments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "postId": {
+          "name": "postId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "hashTag": {
       "name": "hashTag",
       "schema": "",
@@ -52,8 +93,43 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "foreignKeys": {
+        "postToHashTag_postId_posts_id_fk": {
+          "name": "postToHashTag_postId_posts_id_fk",
+          "tableFrom": "postToHashTag",
+          "tableTo": "posts",
+          "columnsFrom": [
+            "postId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "postToHashTag_tagId_hashTag_id_fk": {
+          "name": "postToHashTag_tagId_hashTag_id_fk",
+          "tableFrom": "postToHashTag",
+          "tableTo": "hashTag",
+          "columnsFrom": [
+            "tagId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "postToHashTag_tagId_postId_pk": {
+          "name": "postToHashTag_tagId_postId_pk",
+          "columns": [
+            "tagId",
+            "postId"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "posts": {
@@ -91,6 +167,13 @@
           "notNull": false,
           "default": 0
         },
+        "dislikes": {
+          "name": "dislikes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -122,6 +205,12 @@
         },
         "postId": {
           "name": "postId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
           "type": "text",
           "primaryKey": false,
           "notNull": true

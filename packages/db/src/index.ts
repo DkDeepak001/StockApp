@@ -13,7 +13,9 @@ import {
   hashTag,
   postToHashTag,
   hashTagRelation,
-  postToHashTagRelation
+  postToHashTagRelation,
+  comments,
+  commentsRelations
 } from './schema/schema';
 
 export const schema = {
@@ -27,7 +29,9 @@ export const schema = {
   reactionsRelations,
   postToHashTag,
   postToHashTagRelation,
-  hashTagRelation
+  hashTagRelation,
+  comments,
+  commentsRelations
 }
 const sql = neon(process.env.DB_URL!);
 export const db = drizzle(sql);

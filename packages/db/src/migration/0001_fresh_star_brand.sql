@@ -1,0 +1,1 @@
+ALTER TABLE "posts" ADD COLUMN "dislikes" integer DEFAULT 0;

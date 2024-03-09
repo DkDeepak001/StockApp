@@ -1,1 +1,0 @@
-ALTER TABLE "postToHashTag" ADD CONSTRAINT "postToHashTag_tagId_postId_pk" PRIMARY KEY("tagId","postId");

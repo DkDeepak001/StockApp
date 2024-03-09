@@ -1,4 +1,3 @@
-import { sql } from 'drizzle-orm'
 import { relations } from "drizzle-orm";
 import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey } from "drizzle-orm/pg-core";
 
@@ -11,7 +10,9 @@ export const users = pgTable("users", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
-  reactions: many(reactions)
+  reactions: many(reactions),
+  comments: many(comments)
+
 }))
 
 
@@ -22,7 +23,7 @@ export const posts = pgTable("posts", {
   authorId: text('authorId').notNull(),
   description: text("description"),
   likes: integer("likes").default(0),
-  dislikes: integer("likes").default(0),
+  dislikes: integer("dislikes").default(0),
   createdAt: timestamp('created_at').defaultNow(),
   // updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
 })
@@ -34,6 +35,7 @@ export const postRelations = relations(posts, ({ one, many }) => ({
     references: [users.id]
   }),
   reactions: many(reactions),
+  comments: many(comments),
   tags: many(postToHashTag)
 }))
 
@@ -46,7 +48,7 @@ export const reactions = pgTable("reactions", ({
   id: uuid('id').primaryKey(),
   type: reactionsType("reactionsType"),
   postId: text("postId").notNull(),
-  userId: text("postId").notNull(),
+  userId: text("userId").notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   // updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
 }))
@@ -63,6 +65,30 @@ export const reactionsRelations = relations(reactions, ({ one }) => ({
 }))
 
 
+// COMMENTS Schema 
+
+export const comments = pgTable("comments", {
+  id: uuid("id").primaryKey(),
+  comment: text("comment").notNull(),
+  postId: uuid("postId").notNull(),
+  userId: text("userId").notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+
+})
+
+export const commentsRelations = relations(comments, ({ one }) => ({
+  post: one(posts, {
+    references: [posts.id],
+    fields: [comments.postId]
+  }),
+  user: one(users, {
+    references: [users.id],
+    fields: [comments.userId]
+  })
+}))
+
+
+
 // Hashtag Schema
 export const hashTag = pgTable("hashTag", {
   id: uuid("id").primaryKey().notNull(),
@@ -74,6 +100,7 @@ export const hashTagRelation = relations(hashTag, ({ many }) => ({
 }))
 
 
+//post to hashTag relation
 export const postToHashTag = pgTable("postToHashTag", {
   postId: uuid("postId").references(() => posts.id),
   hashTagId: uuid('tagId').references(() => hashTag.id)
@@ -92,9 +119,6 @@ export const postToHashTagRelation = relations(postToHashTag, ({ one }) => ({
     fields: [postToHashTag.hashTagId]
   })
 }))
-
-
-
 
 
 
