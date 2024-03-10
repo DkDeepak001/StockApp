@@ -121,7 +121,7 @@ export const postToHashTagRelation = relations(postToHashTag, ({ one }) => ({
 }))
 
 
-// Users Inrests Table 
+// Users Intrests Table 
 export const userToHashTag = pgTable("userIntrests", {
   userId: uuid("userId").references(() => users.id),
   hashTagId: uuid('tagId').references(() => hashTag.id)
@@ -139,3 +139,6 @@ export const userToHashTagRelation = relations(userToHashTag, ({ one }) => ({
     fields: [userToHashTag.hashTagId]
   })
 }))
+
+
+
