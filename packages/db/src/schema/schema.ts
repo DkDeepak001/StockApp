@@ -11,8 +11,8 @@ export const users = pgTable("users", {
 export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
   reactions: many(reactions),
-  comments: many(comments)
-
+  comments: many(comments),
+  intrests: many(userToHashTag)
 }))
 
 
@@ -96,7 +96,8 @@ export const hashTag = pgTable("hashTag", {
 })
 
 export const hashTagRelation = relations(hashTag, ({ many }) => ({
-  posts: many(postToHashTag)
+  posts: many(postToHashTag),
+  users: many(userToHashTag)
 }))
 
 
@@ -107,7 +108,6 @@ export const postToHashTag = pgTable("postToHashTag", {
 }, (t) => ({
   pk: primaryKey({ columns: [t.hashTagId, t.postId] })
 }))
-
 
 export const postToHashTagRelation = relations(postToHashTag, ({ one }) => ({
   post: one(posts, {
@@ -121,5 +121,21 @@ export const postToHashTagRelation = relations(postToHashTag, ({ one }) => ({
 }))
 
 
+// Users Inrests Table 
+export const userToHashTag = pgTable("userIntrests", {
+  userId: uuid("userId").references(() => users.id),
+  hashTagId: uuid('tagId').references(() => hashTag.id)
+}, (t) => ({
+  pk: primaryKey({ columns: [t.hashTagId, t.userId] })
+}))
 
-
+export const userToHashTagRelation = relations(userToHashTag, ({ one }) => ({
+  user: one(users, {
+    fields: [userToHashTag.userId],
+    references: [users.id]
+  }),
+  handTag: one(hashTag, {
+    references: [hashTag.id],
+    fields: [userToHashTag.hashTagId]
+  })
+}))

@@ -22,6 +22,20 @@
       "when": 1710045609628,
       "tag": "0002_majestic_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1710047410573,
+      "tag": "0003_nervous_colleen_wing",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1710047486836,
+      "tag": "0004_lush_wind_dancer",
+      "breakpoints": true
     }
   ]
 }
