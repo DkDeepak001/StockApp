@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import FlashMessage from "react-native-flash-message";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
-import { ThemeProvider } from "@react-navigation/native";
+
 
 export default function RootLayout() {
   return <RootLayoutNav />;
@@ -55,7 +55,7 @@ const AuthInitalizer = () => {
     console.log("AuthInitalizer", isSignedIn, isTabGroup, segment)
 
     if (isSignedIn && !isTabGroup) {
-      router.replace("/(auth)/feed")
+      router.replace("/(tabs)/feed")
     } else {
       router.replace("/onboarding")
     }

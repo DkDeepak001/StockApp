@@ -26,6 +26,7 @@ const CreatorMode = () => {
 
 
   useLayoutEffect(() => {
+    console.log("-=")
     getPermissions()
     navigation.setOptions({
       headerRight: () => {
@@ -38,7 +39,7 @@ const CreatorMode = () => {
       },
 
     })
-  }, [])
+  }, [selectedImages])
 
 
   const handleRemoveSelectedImage = () => {
@@ -89,6 +90,7 @@ const CreatorMode = () => {
 
 
   const handleContinue = useCallback(async () => {
+    console.log("clicked")
     try {
       let conditionsPassed = true;
       if (!selectedImages?.length) {
@@ -109,11 +111,12 @@ const CreatorMode = () => {
           return;
         }
       });
+      console.log("asdasd")
 
       if (!conditionsPassed) {
         return; // Exit the function if any condition failed
       }
-      // router.push({ pathname: "/creator/form", params: { selectedImages: JSON.stringify(selectedImages) } })
+      router.push({ pathname: "/addPost/form" })
     } catch (error) {
       console.log(error)
     }
