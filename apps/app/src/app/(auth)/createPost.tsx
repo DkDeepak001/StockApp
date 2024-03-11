@@ -14,8 +14,8 @@ import { launchImageLibrary, launchCamera, Asset } from 'react-native-image-pick
 import { showMessage } from "react-native-flash-message"
 import Carousel from "../../components/carousel"
 import { type FlashList } from "@shopify/flash-list"
-import { Feather } from "@expo/vector-icons"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons"
+import { Button } from "~/components/commons/button"
 
 export type UpdateEditImageProps = Pick<Asset, "height" | "width" | "uri">
 
@@ -37,16 +37,17 @@ const CreatorMode = () => {
 
   useLayoutEffect(() => {
     getPermissions()
-    // navigation.setOptions({
-    //   headerRight: () => {
-    //     if (crop || selectedImages.length === 0) return
-    //     return (
-    //       <Pressable className="mr-1 p-2" onPress={() => handleRemoveSelectedImage()}>
-    //       </Pressable>
-    //     )
-    //   },
-    //
-    // })
+    navigation.setOptions({
+      headerRight: () => {
+        if (crop || selectedImages.length === 0) return
+        return (
+          <Pressable className="mr-1 p-2" onPress={() => handleRemoveSelectedImage()}>
+            <MaterialIcons name="delete-outline" size={24} color="white" />
+          </Pressable>
+        )
+      },
+
+    })
     BackHandler.addEventListener("hardwareBackPress", handleBack)
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack)
@@ -67,8 +68,7 @@ const CreatorMode = () => {
   const openImagePicker = useCallback(async () => {
     const res = await launchImageLibrary({
       quality: 1,
-      videoQuality: "low",
-      selectionLimit: 0,
+      selectionLimit: 10,
       mediaType: "photo",
       includeBase64: false,
     })
@@ -123,32 +123,7 @@ const CreatorMode = () => {
     }
   }, [])
 
-  const updateEditedImage = ({ uri, width, height }: UpdateEditImageProps) => {
-    setSelectedImages((prev) => {
-      const updatedItem = [...prev]
-      updatedItem[activeSlide] = {
-        ...updatedItem[activeSlide],
-        height: height,
-        width: width,
-        uri: uri,
-      }
-      return updatedItem
-    })
-    setCrop(false)
-  }
 
-  const handleEditor = () => {
-    if (selectedImages.length === 0) {
-      ToastAndroid.show("please slected image to edit", 2000)
-      return
-    }
-    console.log(selectedImages[activeSlide]?.type)
-    if (selectedImages.length !== 0 && selectedImages[activeSlide]?.type !== "image/webp" && selectedImages[activeSlide]?.type !== "image/gif" && !selectedImages[activeSlide]?.type?.includes("video")!) {
-      setCrop(true)
-    } else {
-      ToastAndroid.show(`cannot Edit ${selectedImages[activeSlide]?.type?.split('/')[1]}`, 1000)
-    }
-  }
 
   const handleContinue = useCallback(async () => {
     try {
@@ -161,42 +136,15 @@ const CreatorMode = () => {
         CreatorModeError("Max 10 Memes are allowed");
         return;
       }
+
       selectedImages?.forEach((assets, index) => {
         const fileSizeInMB = assets.fileSize! / (1024 * 1024);
-        if (assets.type?.includes("video") && assets.type !== "video/mp4") {
-          CreatorModeError("Invalid format! only mp4 is supported");
-          conditionsPassed = false;
-          scrollRef.current?.scrollToIndex({ index: index, animated: true });
-          return;
-        }
-        if (assets.type?.includes("video") && assets.duration! >= 61) {
-          CreatorModeError("Video should be less than 60s");
-          conditionsPassed = false;
-          scrollRef.current?.scrollToIndex({ index: index, animated: true });
-          return;
-        }
-        if (assets.type?.includes("video") && fileSizeInMB >= 100) {
-          CreatorModeError("Video should be less than 100MB");
-          conditionsPassed = false;
-          scrollRef.current?.scrollToIndex({ index: index, animated: true });
-
-          return;
-        }
         if (assets.type?.includes("image") && fileSizeInMB >= 10) {
           CreatorModeError("image should be less than 10MB");
           conditionsPassed = false;
           scrollRef.current?.scrollToIndex({ index: index, animated: true });
           return;
         }
-
-        if ((assets.type?.includes("gif") || assets.type?.includes("webp")) && fileSizeInMB >= 2) {
-          CreatorModeError("gif should be less than 2MB");
-          conditionsPassed = false;
-          scrollRef.current?.scrollToIndex({ index: index, animated: true });
-          return;
-        }
-
-
       });
 
       if (!conditionsPassed) {
@@ -216,21 +164,26 @@ const CreatorMode = () => {
   //   )
 
   return (
-    <View className="items-center flex justify-start h-full pt-5">
-      {selectedImages.length === 0 ?
-        <Pressable className="w-full  border-2 border-white p-5 rounded-xl" onPress={openImagePicker}>
-          <Feather size={68} name="plus" color='white' />
-        </Pressable>
-        :
-        <View className="h-[90%]">
-          <Carousel
-            selectedImages={selectedImages}
-            setActiveSlide={(val: number) => setActiveSlide(val)}
-            active={activeSlide}
-            scrollRef={scrollRef}
-          />
-        </View>
-      }
+    <View className="h-full items-center justify-center flex flex-1 ">
+      <View className="items-center flex justify-center pt-5 h-[90%]">
+        {selectedImages.length === 0 ?
+          <Pressable className="border-2 border-white p-5  rounded-xl" onPress={openImagePicker}>
+            <Feather size={68} name="plus" color='white' />
+          </Pressable>
+          :
+          <View className="h-[90%]">
+            <Carousel
+              selectedImages={selectedImages}
+              setActiveSlide={(val: number) => setActiveSlide(val)}
+              active={activeSlide}
+              scrollRef={scrollRef}
+            />
+          </View>
+        }
+      </View>
+      <Button variants="fill" >
+        <Text className="font-extrabold text-lg tracking-wide">NEXT</Text>
+      </Button>
     </View>
   )
 }

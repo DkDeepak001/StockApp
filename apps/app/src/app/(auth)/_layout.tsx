@@ -1,11 +1,10 @@
 import React from 'react';
-import { Feather } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { AntDesign, Feather } from '@expo/vector-icons';
+import { Tabs, useRouter } from 'expo-router';
 
-import Colors from '../../constants/Colors';
-import { useColorScheme } from '../../components/useColorScheme';
 import { useClientOnlyValue } from '../../components/useClientOnlyValue';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable } from 'react-native';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -16,7 +15,7 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const router = useRouter()
   const insets = useSafeAreaInsets();
 
   return (
@@ -48,11 +47,19 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="createPost"
+
         options={{
+          tabBarStyle: {
+            display: "none"
+          },
           tabBarIcon: ({ color }) => <TabBarIcon name="plus-circle" color={color} />,
           headerShown: true,
           title: "Start Post",
           headerTitleAlign: "center",
+          headerLeft: () =>
+            <Pressable className='px-5' onPress={() => router.back()}>
+              <AntDesign name="close" size={24} color="white" />
+            </Pressable>,
           headerStyle: {
             backgroundColor: 'black',
           },
@@ -60,7 +67,6 @@ export default function TabLayout() {
             fontSize: 22,
             color: "white",
             paddingHorizontal: 6,
-            paddingTop: 15
           }
         }}
       />
