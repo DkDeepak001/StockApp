@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey, pgTableCreator } from "drizzle-orm/pg-core";
 
 // Users schema
 export const users = pgTable("users", {
@@ -141,4 +141,12 @@ export const userToHashTagRelation = relations(userToHashTag, ({ one }) => ({
 }))
 
 
-
+export const files = pgTable("file", {
+  id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
+  url: text("url").notNull().unique(),
+  path: text("filePath").notNull(),
+  height: text("height"),
+  weight: text("weight"),
+  createdAt: timestamp('created_at').defaultNow(),
+})
