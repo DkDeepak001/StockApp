@@ -50,6 +50,18 @@ export default function TabLayout() {
         name="createPost"
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="plus-circle" color={color} />,
+          headerShown: true,
+          title: "Start Post",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitleStyle: {
+            fontSize: 22,
+            color: "white",
+            paddingHorizontal: 6,
+            paddingTop: 15
+          }
         }}
       />
       <Tabs.Screen

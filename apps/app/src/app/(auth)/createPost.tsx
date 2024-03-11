@@ -15,7 +15,7 @@ import { showMessage } from "react-native-flash-message"
 import Carousel from "../../components/carousel"
 import { type FlashList } from "@shopify/flash-list"
 import { Feather } from "@expo/vector-icons"
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export type UpdateEditImageProps = Pick<Asset, "height" | "width" | "uri">
 
@@ -37,23 +37,16 @@ const CreatorMode = () => {
 
   useLayoutEffect(() => {
     getPermissions()
-    navigation.setOptions({
-      headerTitle: crop ? "Editor" : "Creator Mode",
-      headerLeft: () => {
-        return (
-          <Pressable className="mr-1 p-2" onPress={() => crop ? setCrop(false) : navigation.goBack()}>
-          </Pressable>
-        )
-      },
-      headerRight: () => {
-        if (crop || selectedImages.length === 0) return
-        return (
-          <Pressable className="mr-1 p-2" onPress={() => handleRemoveSelectedImage()}>
-          </Pressable>
-        )
-      },
-
-    })
+    // navigation.setOptions({
+    //   headerRight: () => {
+    //     if (crop || selectedImages.length === 0) return
+    //     return (
+    //       <Pressable className="mr-1 p-2" onPress={() => handleRemoveSelectedImage()}>
+    //       </Pressable>
+    //     )
+    //   },
+    //
+    // })
     BackHandler.addEventListener("hardwareBackPress", handleBack)
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBack)
@@ -76,9 +69,8 @@ const CreatorMode = () => {
       quality: 1,
       videoQuality: "low",
       selectionLimit: 0,
-      mediaType: "mixed",
+      mediaType: "photo",
       includeBase64: false,
-      formatAsMp4: true,
     })
     if (res.didCancel) {
       console.log("User cancelled")
@@ -224,24 +216,22 @@ const CreatorMode = () => {
   //   )
 
   return (
-    <SafeAreaView className="flex flex-col  flex-1 items-center justify-between bg-black">
-      <View className="w-full h-full flex items-center justify-between">
-        <View className="items-center flex justify-center h-full ">
-          {selectedImages.length === 0 ?
-            <Pressable className="w-full  border-2 border-white p-5 rounded-xl" onPress={openImagePicker}>
-              <Feather size={68} name="plus" color='white' />
-            </Pressable>
-            :
-            <Carousel
-              selectedImages={selectedImages}
-              setActiveSlide={(val: number) => setActiveSlide(val)}
-              active={activeSlide}
-              scrollRef={scrollRef}
-            />
-          }
+    <View className="items-center flex justify-start h-full pt-5">
+      {selectedImages.length === 0 ?
+        <Pressable className="w-full  border-2 border-white p-5 rounded-xl" onPress={openImagePicker}>
+          <Feather size={68} name="plus" color='white' />
+        </Pressable>
+        :
+        <View className="h-[90%]">
+          <Carousel
+            selectedImages={selectedImages}
+            setActiveSlide={(val: number) => setActiveSlide(val)}
+            active={activeSlide}
+            scrollRef={scrollRef}
+          />
         </View>
-      </View>
-    </SafeAreaView>
+      }
+    </View>
   )
 }
 

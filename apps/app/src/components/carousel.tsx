@@ -1,8 +1,7 @@
-import { FlatList } from "react-native-gesture-handler"
 import { type FlashList } from "@shopify/flash-list"
 import { RefObject } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, useWindowDimensions } from "react-native"
-import { View } from "react-native"
+import { View, FlatList } from "react-native"
 import { Asset } from "react-native-image-picker"
 import { Image } from "expo-image"
 import Pagination from "./onboarding/pagiantion"
@@ -81,6 +80,7 @@ const renderItem = ({ item }: { item: Asset }) => {
         <Image
           source={{ uri: item.uri! }}
           style={styles.image}
+          className="rounded-xl"
         />
 
       </View>
