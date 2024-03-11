@@ -26,7 +26,6 @@ const CreatorMode = () => {
 
 
   useLayoutEffect(() => {
-    console.log("-=")
     getPermissions()
     navigation.setOptions({
       headerRight: () => {

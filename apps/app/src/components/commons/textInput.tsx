@@ -36,8 +36,8 @@ export const FormInput = <T extends FieldValues>({ control, name, error, classNa
 export const BasicInput = ({ className, ...props }: TextInputProps) => {
   return (
     <View className="w-11/12 items-center flex justify-center mb-2">
-      <TextInput className={`w-full border border-white/50 rounded-lg py-2 px-4 font-bold text-white ${className}`}
-        placeholderTextColor="gray"
+      <TextInput className={`w-full rounded-2xl py-4 px-4 font-bold text-white bg-zinc-800 ${className}`}
+        placeholderTextColor="#cccccc"
         {...props}
       />
     </View>

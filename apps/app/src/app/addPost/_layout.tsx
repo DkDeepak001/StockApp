@@ -4,16 +4,24 @@ import { Stack } from 'expo-router';
 const AddPostLayout = () => {
   return (
     <Stack
+
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: "black"
+        },
+        headerTitleAlign: "center",
+        headerTitleStyle: {
+          color: "white"
+        },
         contentStyle: { backgroundColor: 'black' }
       }}>
       <Stack.Screen
         name="form"
         options={{
-          headerShown: false
-        }} />
-
+          title: "Add New Post"
+        }}
+      />
     </Stack>
   );
 };

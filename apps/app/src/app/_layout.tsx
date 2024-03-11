@@ -55,7 +55,7 @@ const AuthInitalizer = () => {
     console.log("AuthInitalizer", isSignedIn, isTabGroup, segment)
 
     if (isSignedIn && !isTabGroup) {
-      router.replace("/(tabs)/feed")
+      router.replace("/addPost/form")
     } else {
       router.replace("/onboarding")
     }
