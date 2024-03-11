@@ -3,18 +3,14 @@ import {
   View,
   Pressable,
   PermissionsAndroid,
-  BackHandler,
-  ToastAndroid,
   Text
 } from "react-native"
 import { useNavigation, useRouter } from "expo-router"
-import { usePageInteraction } from "../../utils/pageInteraction"
-import { useIsReady } from '../../utils/utilsfn'
-import { launchImageLibrary, launchCamera, Asset } from 'react-native-image-picker';
+import { launchImageLibrary, Asset } from 'react-native-image-picker';
 import { showMessage } from "react-native-flash-message"
 import Carousel from "../../components/carousel"
 import { type FlashList } from "@shopify/flash-list"
-import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons"
+import { Feather, MaterialIcons } from "@expo/vector-icons"
 import { Button } from "~/components/commons/button"
 
 export type UpdateEditImageProps = Pick<Asset, "height" | "width" | "uri">
@@ -24,35 +20,25 @@ const CreatorMode = () => {
   const router = useRouter()
 
   const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
-  const [crop, setCrop] = useState<boolean>(false)
   const scrollRef = useRef<FlashList<Asset>>(null)
   const [activeSlide, setActiveSlide] = useState<number>(0)
 
 
-  const handleBack = () => {
-    if (crop) setCrop(false)
-    else navigation.goBack()
-    return true
-  }
 
   useLayoutEffect(() => {
     getPermissions()
     navigation.setOptions({
       headerRight: () => {
-        if (crop || selectedImages.length === 0) return
+        if (selectedImages.length === 0) return
         return (
-          <Pressable className="mr-1 p-2" onPress={() => handleRemoveSelectedImage()}>
+          <Pressable className="mr-2 p-2" onPress={() => handleRemoveSelectedImage()}>
             <MaterialIcons name="delete-outline" size={24} color="white" />
           </Pressable>
         )
       },
 
     })
-    BackHandler.addEventListener("hardwareBackPress", handleBack)
-    return () => {
-      BackHandler.removeEventListener("hardwareBackPress", handleBack)
-    }
-  }, [navigation, crop, selectedImages.length])
+  }, [])
 
 
   const handleRemoveSelectedImage = () => {
@@ -71,6 +57,7 @@ const CreatorMode = () => {
       selectionLimit: 10,
       mediaType: "photo",
       includeBase64: false,
+
     })
     if (res.didCancel) {
       console.log("User cancelled")
@@ -97,31 +84,7 @@ const CreatorMode = () => {
     }
   }, [])
 
-  const openCamera = useCallback(async () => {
-    try {
-      const cameraRes = await launchCamera({
-        quality: 1,
-        includeBase64: false,
-        mediaType: "mixed",
-        videoQuality: "medium",
-        formatAsMp4: true,
-        saveToPhotos: true,
-        durationLimit: 60,
 
-      })
-      if (cameraRes.didCancel) {
-        console.log("User cancelled")
-      } else if (cameraRes.errorCode) {
-        console.log("ImagePickerError: ", cameraRes.errorMessage)
-      } else {
-        if (cameraRes.assets) {
-          setSelectedImages((prev) => [...prev, ...cameraRes.assets!])
-        }
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }, [])
 
 
 
@@ -129,18 +92,18 @@ const CreatorMode = () => {
     try {
       let conditionsPassed = true;
       if (!selectedImages?.length) {
-        CreatorModeError("Please select an image to continue");
+        ShowError("Please select an image to continue");
         return;
       }
       if (selectedImages?.length > 10) {
-        CreatorModeError("Max 10 Memes are allowed");
+        ShowError("Max 10 Memes are allowed");
         return;
       }
 
       selectedImages?.forEach((assets, index) => {
         const fileSizeInMB = assets.fileSize! / (1024 * 1024);
         if (assets.type?.includes("image") && fileSizeInMB >= 10) {
-          CreatorModeError("image should be less than 10MB");
+          ShowError("image should be less than 10MB");
           conditionsPassed = false;
           scrollRef.current?.scrollToIndex({ index: index, animated: true });
           return;
@@ -154,7 +117,7 @@ const CreatorMode = () => {
     } catch (error) {
       console.log(error)
     }
-  }, [selectedImages.length, crop, activeSlide])
+  }, [selectedImages.length, activeSlide])
 
   // if (loading || !ready)
   //   return (
@@ -181,7 +144,7 @@ const CreatorMode = () => {
           </View>
         }
       </View>
-      <Button variants="fill" >
+      <Button variants="fill" onPress={handleContinue} >
         <Text className="font-extrabold text-lg tracking-wide">NEXT</Text>
       </Button>
     </View>
@@ -190,15 +153,11 @@ const CreatorMode = () => {
 
 export default CreatorMode
 
-const CreatorModeError = (title: string) => showMessage({
+const ShowError = (title: string) => showMessage({
   message: title,
   type: "danger",
   icon: "danger",
   position: "top",
-  style: {
-    height: "100%",
-    top: "10%"
-  }
 });
 
 
