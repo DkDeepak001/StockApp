@@ -12,6 +12,8 @@ import Carousel from "../../components/carousel"
 import { type FlashList } from "@shopify/flash-list"
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 import { Button } from "~/components/commons/button"
+import { uploadToS3 } from "~/utils/uploadTos3";
+import Pagination from "~/components/onboarding/pagiantion";
 
 export type UpdateEditImageProps = Pick<Asset, "height" | "width" | "uri">
 
