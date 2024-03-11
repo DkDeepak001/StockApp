@@ -1,11 +1,20 @@
 import { z } from "zod";
 
-export const CreatePostSchema = z.object({
-  title: z.string().min(1),
-  content: z.string().min(1),
+
+// CreatePostSchema
+export const CreatePostFormSchema = z.object({
+  title: z.string().min(1, {
+    message: "Title should be atleast 1 letter"
+  }),
+  content: z.string().min(3, {
+    message: "descripition should be more than 3 letter"
+  }),
 });
 
+export type CreatePostSchema = z.infer<typeof CreatePostFormSchema>
 
+
+// LoginFormSchema
 export const LoginFormSchema = z.object({
   email: z.string().email({
     message: "Invalid Email Address"
@@ -18,6 +27,7 @@ export const LoginFormSchema = z.object({
 export type LoginScehma = z.infer<typeof LoginFormSchema>
 
 
+// RegisterFormScehma
 export const RegisterFormScehma = z.object({
   email: z.string().email({
     message: "Invalid Email Address"
