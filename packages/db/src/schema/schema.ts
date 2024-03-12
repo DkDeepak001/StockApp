@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey, pgTableCreator } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey } from "drizzle-orm/pg-core";
 
 // Users schema
 export const users = pgTable("users", {
@@ -32,11 +32,12 @@ export const posts = pgTable("posts", {
 export const postRelations = relations(posts, ({ one, many }) => ({
   author: one(users, {
     fields: [posts.authorId],
-    references: [users.id]
+    references: [users.userId]
   }),
   reactions: many(reactions),
   comments: many(comments),
-  tags: many(postToHashTag)
+  tags: many(postToHashTag),
+  files: many(files)
 }))
 
 
@@ -146,7 +147,15 @@ export const files = pgTable("file", {
   name: text("name").notNull(),
   url: text("url").notNull().unique(),
   path: text("filePath").notNull(),
-  height: text("height"),
-  weight: text("weight"),
+  postId: uuid("postId"),
+  height: integer("height").default(0),
+  width: integer("weight").default(0),
   createdAt: timestamp('created_at').defaultNow(),
 })
+
+export const filesRelation = relations(files, ({ one }) => ({
+  post: one(posts, {
+    references: [posts.id],
+    fields: [files.postId]
+  })
+}))

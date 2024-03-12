@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1709894319841,
-      "tag": "0000_tiny_paibok",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1709894431880,
-      "tag": "0001_fresh_star_brand",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1710045609628,
-      "tag": "0002_majestic_leper_queen",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1710047410573,
-      "tag": "0003_nervous_colleen_wing",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1710047486836,
-      "tag": "0004_lush_wind_dancer",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1710165702736,
-      "tag": "0005_ordinary_luminals",
+      "when": 1710229746862,
+      "tag": "0000_chemical_firebird",
       "breakpoints": true
     }
   ]
