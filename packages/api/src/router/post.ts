@@ -1,12 +1,38 @@
 import { schema } from "@stockHub/db";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { CreatePostApi } from "@stockHub/validators";
+import { v4 as uuidv4 } from 'uuid';
 
-export const authRouter = createTRPCRouter({
-  getSession: publicProcedure.query(({ ctx }) => {
-    return ctx.db.select().from(schema.users).limit(1);
-  }),
-  getSecretMessage: protectedProcedure.query(() => {
-    // testing type validation of overridden next-auth Session in @cap10/auth package
-    return "you can see this secret message!";
-  }),
-});
+
+
+type InsertFiles = typeof schema.files.$inferInsert
+
+export const postRouter = createTRPCRouter({
+  add: protectedProcedure.input(CreatePostApi).mutation(async ({ input, ctx }) => {
+
+    const post = await ctx.db.insert(schema.posts).values({
+      id: uuidv4(),
+      tittle: input.title,
+      description: input.content,
+      authorId: ctx.session.userId,
+    }).returning({ postId: schema.posts.id })
+
+    const file = await ctx.db.insert(schema.files).values(input.file.map<InsertFiles>((f) => {
+      const pid = uuidv4()
+      return {
+        id: pid,
+        url: f.url,
+        name: `${ctx.session.userId}-post-${pid}`,
+        path: '',
+        height: f.height,
+        width: f.width,
+        postId: post[0]?.postId
+      }
+    })
+    )
+    return {
+      ...post,
+      files: file
+    }
+  })
+})
