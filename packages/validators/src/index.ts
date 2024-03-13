@@ -13,6 +13,16 @@ export const CreatePostFormSchema = z.object({
 
 export type CreatePostSchema = z.infer<typeof CreatePostFormSchema>
 
+export const CreatePostApi = CreatePostFormSchema.extend({
+  file: z.array(z.object({
+
+    url: z.string(),
+    height: z.number().nonnegative(),
+    width: z.number().nonnegative()
+  }))
+})
+
+
 
 // LoginFormSchema
 export const LoginFormSchema = z.object({

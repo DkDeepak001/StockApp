@@ -23,17 +23,8 @@ export { type RouterInputs, type RouterOutputs } from "@stockHub/api";
  * setting the baseUrl to your production API URL.
  */
 const getBaseUrl = () => {
-  /**
-   * Gets the IP address of your host-machine. If it cannot automatically find it,
-   * you'll have to manually set it. NOTE: Port 3000 should work for most but confirm
-   * you don't have anything else running on it, or you'd have to change it.
-   *
-   * **NOTE**: This is only for development. In production, you'll want to set the
-   * baseUrl to your production API URL.
-   */
   const urlString = Constants.manifest2?.launchAsset.url.split("/");
   const localhost = urlString?.slice(0, 3).join("/");
-  console.log(localhost);
   if (!localhost) {
     // return "https://admin.con10tlabs.com";
   }
@@ -52,7 +43,6 @@ export const TRPCProvider: React.FC<{ children: React.ReactNode }> = ({
     storage: AsyncStorage,
   });
   const { getToken } = useAuth();
-
   const [queryClient] = useState(
     () =>
       new QueryClient({
