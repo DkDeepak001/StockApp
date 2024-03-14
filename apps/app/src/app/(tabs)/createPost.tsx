@@ -13,6 +13,8 @@ import { type FlashList } from "@shopify/flash-list"
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 import { Button } from "~/components/commons/button"
 import { useSelectedImages } from "~/store/post";
+import { scheduleFlushOperations } from "react-native-gesture-handler/lib/typescript/handlers/gestureHandlerCommon";
+import Loader from "~/components/commons/loader";
 
 export type UpdateEditImageProps = Pick<Asset, "height" | "width" | "uri">
 
@@ -20,7 +22,6 @@ const CreatorMode = () => {
   const navigation = useNavigation()
   const router = useRouter()
 
-  // const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
   const selectedImages = useSelectedImages((state) => state.selectedImages)
   const setSelectedImages = useSelectedImages((state) => state.setSelectedImage)
   const scrollRef = useRef<FlashList<Asset>>(null)
@@ -46,8 +47,8 @@ const CreatorMode = () => {
 
   const handleRemoveSelectedImage = () => {
     const indexToRemove = scrollRef.current!.props.initialScrollIndex as number
-    const newVal = selectedImages.splice(indexToRemove, 1)
-    setSelectedImages(newVal);
+    selectedImages.splice(indexToRemove, 1)
+    setSelectedImages(selectedImages);
   }
 
 
@@ -86,11 +87,7 @@ const CreatorMode = () => {
   }, [])
 
 
-
-
-
   const handleContinue = useCallback(async () => {
-    console.log("clicked")
     try {
       let conditionsPassed = true;
       if (!selectedImages?.length) {
@@ -122,12 +119,6 @@ const CreatorMode = () => {
     }
   }, [selectedImages.length, activeSlide])
 
-  // if (loading || !ready)
-  //   return (
-  //     <View className="flex-1 bg-brand-bg">
-  //       <Text className="text-white">Loading</Text>
-  //     </View>
-  //   )
 
   return (
     <View className="h-full items-center justify-center flex flex-1 ">

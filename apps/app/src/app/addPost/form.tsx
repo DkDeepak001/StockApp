@@ -13,6 +13,7 @@ import { uploadToS3 } from "~/utils/uploadTos3";
 
 const FormScreen = () => {
   const selecetedImages = useSelectedImages(state => state.selectedImages)
+  const setSelectedImages = useSelectedImages(state => state.setSelectedImage)
   const {
     control,
     handleSubmit,
@@ -23,6 +24,7 @@ const FormScreen = () => {
   const { mutateAsync: addPost, isLoading: isPostAdding } = api.post.add.useMutation({
     onSuccess: () => {
       router.push('/feed')
+      setSelectedImages([])
     }
   })
   const handlePost = async (data: CreatePostSchema) => {
