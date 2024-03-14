@@ -3,8 +3,8 @@ import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey } 
 
 // Users schema
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(),
-  userId: text("userId").unique().notNull(),
+  id: uuid("id"),
+  userId: text("userId").unique().notNull().primaryKey(),
   createdAt: timestamp('createdAt').defaultNow()
 })
 

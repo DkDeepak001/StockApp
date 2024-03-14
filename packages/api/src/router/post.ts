@@ -1,5 +1,5 @@
 import { schema } from "@stockHub/db";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { CreatePostApi } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -36,7 +36,14 @@ export const postRouter = createTRPCRouter({
     }
   }),
   all: protectedProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.db.select().from(schema.posts)
+    return await ctx.db.query.posts.findMany({
+      with: {
+        files: true,
+        author: true
+
+      }
+    })
+
 
   })
 })

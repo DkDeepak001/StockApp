@@ -6,6 +6,6 @@ import * as schemas from './schema/schema';
 
 export const schema = schemas
 const sql = neon(process.env.DB_URL!);
-export const db = drizzle(sql);
+export const db = drizzle(sql, { schema: schemas });
 
 

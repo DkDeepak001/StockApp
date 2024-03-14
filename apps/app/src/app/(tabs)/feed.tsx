@@ -4,7 +4,6 @@ import { api } from "~/utils/api";
 
 const FeedScreen = () => {
   const { data } = api.post.all.useQuery()
-  console.log(data)
   return (
     <SafeAreaView>
       <Text className="text-white">FeedScreen</Text>
