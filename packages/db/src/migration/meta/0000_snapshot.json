@@ -1,5 +1,5 @@
 {
-  "id": "1e8005d3-f51c-4948-b62f-a3fe1a33f700",
+  "id": "b1b21a51-a668-4b41-8d6f-0c0d4f846495",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -252,7 +252,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "posts_authorId_users_userId_fk": {
+          "name": "posts_authorId_users_userId_fk",
+          "tableFrom": "posts",
+          "tableTo": "users",
+          "columnsFrom": [
+            "authorId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },

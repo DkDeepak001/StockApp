@@ -12,8 +12,7 @@ import Carousel from "../../components/carousel"
 import { type FlashList } from "@shopify/flash-list"
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 import { Button } from "~/components/commons/button"
-import { uploadToS3 } from "~/utils/uploadTos3";
-import Pagination from "~/components/onboarding/pagiantion";
+import { useSelectedImages } from "~/store/post";
 
 export type UpdateEditImageProps = Pick<Asset, "height" | "width" | "uri">
 
@@ -21,7 +20,9 @@ const CreatorMode = () => {
   const navigation = useNavigation()
   const router = useRouter()
 
-  const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
+  // const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
+  const selectedImages = useSelectedImages((state) => state.selectedImages)
+  const setSelectedImages = useSelectedImages((state) => state.setSelectedImage)
   const scrollRef = useRef<FlashList<Asset>>(null)
   const [activeSlide, setActiveSlide] = useState<number>(0)
 
@@ -45,11 +46,8 @@ const CreatorMode = () => {
 
   const handleRemoveSelectedImage = () => {
     const indexToRemove = scrollRef.current!.props.initialScrollIndex as number
-    setSelectedImages((prevArray) => {
-      const newArray = [...prevArray];
-      newArray.splice(indexToRemove, 1);
-      return newArray;
-    });
+    const newVal = selectedImages.splice(indexToRemove, 1)
+    setSelectedImages(newVal);
   }
 
 
@@ -67,7 +65,8 @@ const CreatorMode = () => {
       console.log("ImagePickerError: ", res.errorMessage)
     } else {
       if (res.assets) {
-        setSelectedImages((prev) => [...prev, ...res.assets!])
+        const newVal = [...selectedImages, ...res.assets!]
+        setSelectedImages(newVal)
       }
     }
   }, [])

@@ -1,13 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreatePostFormSchema, CreatePostSchema } from "@stockHub/validators";
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Button } from "~/components/commons/button";
 import { FormInput } from "~/components/commons/textInput";
+import { useSelectedImages } from "~/store/post";
 import { api } from "~/utils/api";
+import { uploadToS3 } from "~/utils/uploadTos3";
 
 const FormScreen = () => {
+  const selecetedImages = useSelectedImages(state => state.selectedImages)
   const {
     control,
     handleSubmit,
@@ -15,16 +19,29 @@ const FormScreen = () => {
   } = useForm<CreatePostSchema>({
     resolver: zodResolver(CreatePostFormSchema)
   })
+  console.log(selecetedImages)
 
   const { mutateAsync: addPost, isLoading: isPostAdding } = api.post.add.useMutation({
-    onSuccess: (data) => {
-      console.log("post add success fully ", data)
+    onSuccess: () => {
+      router.push('/feed')
     }
   })
 
 
   const handlePost = async (data: CreatePostSchema) => {
     try {
+      let imagesMetaData = []
+      selecetedImages.map(async (f) => {
+        const uploadedData = await uploadToS3({
+          fileData: {
+            type: f.type!,
+            uri: f.uri!,
+          },
+          location: "post/"
+        })
+        return {
+        }
+      })
       await addPost({
         title: data.title,
         content: data.content,
