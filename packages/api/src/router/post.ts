@@ -1,4 +1,4 @@
-import { schema } from "@stockHub/db/src";
+import { schema } from "@stockHub/db";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { CreatePostApi } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';

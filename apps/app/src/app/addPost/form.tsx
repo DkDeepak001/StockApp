@@ -10,6 +10,7 @@ import { useSelectedImages } from "~/store/post";
 import { api } from "~/utils/api";
 import { uploadToS3 } from "~/utils/uploadTos3";
 
+
 const FormScreen = () => {
   const selecetedImages = useSelectedImages(state => state.selectedImages)
   const {
@@ -19,37 +20,32 @@ const FormScreen = () => {
   } = useForm<CreatePostSchema>({
     resolver: zodResolver(CreatePostFormSchema)
   })
-  console.log(selecetedImages)
-
   const { mutateAsync: addPost, isLoading: isPostAdding } = api.post.add.useMutation({
     onSuccess: () => {
       router.push('/feed')
     }
   })
-
-
   const handlePost = async (data: CreatePostSchema) => {
     try {
-      let imagesMetaData = []
-      selecetedImages.map(async (f) => {
-        const uploadedData = await uploadToS3({
-          fileData: {
-            type: f.type!,
-            uri: f.uri!,
-          },
-          location: "post/"
-        })
-        return {
-        }
-      })
+      const uploadedImages = await Promise.all(
+        selecetedImages.map(async (f) => {
+          const uploadedData = await uploadToS3({
+            fileData: {
+              type: f.type!,
+              uri: f.uri!,
+            },
+            location: "post"
+          })
+          return {
+            url: uploadedData.location,
+            height: f.height!,
+            width: f.height!,
+          }
+        }))
       await addPost({
         title: data.title,
         content: data.content,
-        file: [{
-          url: "https://investorsinsighthub.s3.amazonaws.com/ywJwlK0tlHHkND-MtN8gb-transformed.jpeg",
-          width: 300,
-          height: 300
-        }]
+        file: uploadedImages
       })
     } catch (error) {
       console.log(error, "app")

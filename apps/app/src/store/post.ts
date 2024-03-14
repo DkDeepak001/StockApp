@@ -13,6 +13,6 @@ type slectedImagesType = state & actions
 export const useSelectedImages = create<slectedImagesType>((set) => {
   return {
     selectedImages: [],
-    setSelectedImage: (image) => set((state) => ({ selectedImages: [...image] }))
+    setSelectedImage: (image) => set(() => ({ selectedImages: [...image] }))
   }
 })
