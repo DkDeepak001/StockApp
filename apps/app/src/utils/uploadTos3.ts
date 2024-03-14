@@ -11,6 +11,7 @@ type uploadToS3Types = {
 type CustomResponse = Response & {
   body: {
     postResponse: postResponseType;
+
   };
 };
 
@@ -18,14 +19,16 @@ type postResponseType = {
   bucket: string
   etag: string
   key: string
-  location: string
+  location: string,
+  id: string
 }
 
 
 export async function uploadToS3({ fileData, location }: uploadToS3Types): Promise<postResponseType> {
+  const id = uuid.v4();
   const MetaData = {
     uri: fileData.uri,
-    name: `post-${uuid.v4()}.${fileData.type?.split("/")[1]}`,
+    name: `post-${id}.${fileData.type?.split("/")[1]}`,
     type: fileData.type
   }
   const options: Options = {
@@ -44,7 +47,7 @@ export async function uploadToS3({ fileData, location }: uploadToS3Types): Promi
     throw new Error("Failed to upload image to S3");
   } else {
     console.log(response.body.postResponse)
-    return response.body.postResponse as postResponseType;
+    return { ...response.body.postResponse, id: id } as postResponseType;
   }
 
 }

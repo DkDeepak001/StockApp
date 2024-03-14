@@ -15,7 +15,8 @@ export type CreatePostSchema = z.infer<typeof CreatePostFormSchema>
 
 export const CreatePostApi = CreatePostFormSchema.extend({
   file: z.array(z.object({
-
+    fileId: z.string().uuid(),
+    path: z.string(),
     url: z.string(),
     height: z.number().nonnegative(),
     width: z.number().nonnegative()

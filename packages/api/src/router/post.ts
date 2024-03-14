@@ -20,10 +20,10 @@ export const postRouter = createTRPCRouter({
     const file = await ctx.db.insert(schema.files).values(input.file.map<InsertFiles>((f) => {
       const pid = uuidv4()
       return {
-        id: pid,
+        id: f.fileId,
         url: f.url,
         name: `${ctx.session.userId}-post-${pid}`,
-        path: '',
+        path: f.path,
         height: f.height,
         width: f.width,
         postId: post[0]?.postId

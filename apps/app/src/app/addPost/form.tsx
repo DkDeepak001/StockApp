@@ -40,6 +40,8 @@ const FormScreen = () => {
             url: uploadedData.location,
             height: f.height!,
             width: f.height!,
+            fileId: uploadedData.id,
+            path: uploadedData.key
           }
         }))
       await addPost({
