@@ -34,5 +34,9 @@ export const postRouter = createTRPCRouter({
       ...post,
       files: file
     }
+  }),
+  all: protectedProcedure.query(async ({ ctx }) => {
+    const posts = await ctx.db.select().from(schema.posts)
+
   })
 })
