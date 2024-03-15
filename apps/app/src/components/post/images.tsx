@@ -23,25 +23,27 @@ const PostImages = ({ active, setActive, images, ...props }: PostImagesProps) =>
   }
 
   return (
-    <FlashList
-      initialScrollIndex={active}
-      estimatedItemSize={width * images.length}
-      data={images}
-      ref={scrollRef}
-      renderItem={({ item }: { item: PostProps['files'][0] }) => <RenderItem item={item} />}
-      keyExtractor={(item) => item.id!}
-      horizontal
-      onScroll={handleScroll}
-      pagingEnabled
-      bounces={false}
-      showsHorizontalScrollIndicator={false}
-      {...props}
-    />
+    <View className='bg-black '>
+      <FlashList
+        initialScrollIndex={active}
+        estimatedItemSize={width * images.length}
+        data={images}
+        ref={scrollRef}
+        renderItem={({ item, index }: { item: PostProps['files'][0], index: number }) => <RenderItem item={item} priority={index === 0} />}
+        keyExtractor={(item) => item.id!}
+        horizontal
+        onScroll={handleScroll}
+        pagingEnabled
+        bounces={false}
+        showsHorizontalScrollIndicator={false}
+        {...props}
+      />
+    </View >
+
   )
 }
 
-
-const RenderItem = ({ item }: { item: PostProps['files'][0] }) => {
+const RenderItem = ({ item, priority }: { item: PostProps['files'][0], priority: boolean }) => {
   const { width: screenWidth } = useWindowDimensions()
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
@@ -74,6 +76,9 @@ const RenderItem = ({ item }: { item: PostProps['files'][0] }) => {
             ? maxHeight
             : displayHeight
         }}
+        cachePolicy={'memory-disk'}
+        priority={priority ? "high" : "low"}
+
         contentFit='contain'
       />
     </View>

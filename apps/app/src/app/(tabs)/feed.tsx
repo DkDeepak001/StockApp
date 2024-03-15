@@ -20,7 +20,7 @@ const FeedScreen = () => {
         onRefresh={refetch}
         ItemSeparatorComponent={() => <View className="h-2" />}
         renderItem={({ item }) => <Post {...item} />}
-        estimatedItemSize={100}
+        estimatedItemSize={400}
       />
     </SafeAreaView>
   )
