@@ -42,7 +42,8 @@ export const postRouter = createTRPCRouter({
       with: {
         files: true,
         author: true
-      }
+      },
+      orderBy: (posts, { desc }) => [desc(posts.createdAt)],
     });
 
     const userIds = posts.map(p => p.authorId);
