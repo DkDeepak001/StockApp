@@ -48,13 +48,24 @@ export const postRouter = createTRPCRouter({
     const userIds = posts.map(p => p.authorId);
     const users = await clerkClient.users.getUserList({ userId: userIds });
 
-    const userData: { [userId: string]: User } = {};
+    const userData: { [userId: string]: ReturnUserType } = {};
 
     users.map((u) => {
       if (!userData[u.id]) {
-        userData[u.id] = u
+        userData[u.id] = {
+          imageUrl: u.imageUrl,
+          id: u.id,
+          hasImage: u.hasImage,
+          gender: u.gender,
+          username: u.username,
+          firstName: u.firstName,
+          lastName: u.lastName,
+          emailAddresses: u.emailAddresses,
+          publicMetadata: u.publicMetadata
+        }
       }
     })
+
     return posts.map((post) => {
       const fromNow = moment(post.createdAt!).fromNow()
       return {
@@ -65,3 +76,10 @@ export const postRouter = createTRPCRouter({
     })
   })
 })
+
+
+
+export type ReturnUserType = Pick<User, "lastName" | "emailAddresses" | "firstName" | "username" | "imageUrl" | "id" | "hasImage" | "publicMetadata" | "gender">
+
+
+
