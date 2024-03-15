@@ -21,6 +21,7 @@
     "@stockHub/validators": "*",
     "@trpc/client": "^10.14.0",
     "@trpc/server": "^10.14.0",
+    "moment": "^2.30.1",
     "superjson": "1.9.1",
     "uuid": "^9.0.1",
     "zod": "^3.20.6"

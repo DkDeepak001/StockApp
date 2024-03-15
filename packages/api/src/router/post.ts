@@ -2,7 +2,9 @@ import { schema } from "@stockHub/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { CreatePostApi } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
-
+import { clerkClient } from '@clerk/nextjs';
+import { User } from "@clerk/nextjs/dist/types/server";
+import moment from "moment";
 
 
 type InsertFiles = typeof schema.files.$inferInsert
@@ -36,14 +38,30 @@ export const postRouter = createTRPCRouter({
     }
   }),
   all: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.query.posts.findMany({
+    const posts = await ctx.db.query.posts.findMany({
       with: {
         files: true,
         author: true
+      }
+    });
 
+    const userIds = posts.map(p => p.authorId);
+    const users = await clerkClient.users.getUserList({ userId: userIds });
+
+    const userData: { [userId: string]: User } = {};
+
+    users.map((u) => {
+      if (!userData[u.id]) {
+        userData[u.id] = u
       }
     })
-
-
+    return posts.map((post) => {
+      const fromNow = moment(post.createdAt!).fromNow()
+      return {
+        ...post,
+        fromNow,
+        author: userData[post.authorId],
+      }
+    })
   })
 })
