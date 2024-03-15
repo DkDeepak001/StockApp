@@ -65,7 +65,6 @@ export const postRouter = createTRPCRouter({
         }
       }
     })
-
     return posts.map((post) => {
       const fromNow = moment(post.createdAt!).fromNow()
       return {
