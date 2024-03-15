@@ -60,5 +60,8 @@ export type RegisterSchema = z.infer<typeof RegisterFormScehma>
 
 export const ReactPostApiInput = vailadationType.inserReactionSchema.pick({
   postId: true,
+  type: true
 })
 
+
+export type ReactPostApiInputType = z.infer<typeof ReactPostApiInput>

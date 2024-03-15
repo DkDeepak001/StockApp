@@ -3,7 +3,7 @@ import React from 'react'
 import { FontAwesome6, SimpleLineIcons } from '@expo/vector-icons'
 import Pagination from '../onboarding/pagiantion'
 import { api } from '~/utils/api'
-
+import { ReactPostApiInputType } from '@stockHub/validators'
 type PostActionProps = {
   activeSlide: number
   postLength: number
@@ -12,13 +12,13 @@ type PostActionProps = {
 
 const PostAction = ({ activeSlide, postLength, postId }: PostActionProps) => {
 
-  const { mutateAsync: addLike } = api.post.like.useMutation()
+  const { mutateAsync: addLike } = api.post.react.useMutation()
 
-  const handleLike = async () => {
-    console.log("handleCLick====================")
+  const handleReaction = async (type: Pick<ReactPostApiInputType, "type">) => {
     try {
       await addLike({
-        postId
+        postId,
+        type: type.type
       })
     } catch (error) {
       console.log(error)
@@ -28,10 +28,17 @@ const PostAction = ({ activeSlide, postLength, postId }: PostActionProps) => {
   return (
     <View className='w-full flex flex-row items-center justify-between  px-4 '>
       <View className='flex flex-row gap-x-5 items-center w-1/4 justify-evenly'>
-        <Pressable onPress={handleLike} className='bg-black p-4 rounded-full'>
+        <Pressable
+          onPress={() => handleReaction({ type: 'like' })}
+          className='bg-black p-4 rounded-full'
+        >
           <SimpleLineIcons name="like" size={24} color="white" />
         </Pressable>
-        <Pressable>
+
+        <Pressable
+          onPress={() => handleReaction({ type: 'dislikes' })}
+          className='bg-black p-4 rounded-full'
+        >
           <SimpleLineIcons name="dislike" size={24} color="white" />
         </Pressable>
       </View>

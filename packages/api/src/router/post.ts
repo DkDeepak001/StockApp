@@ -76,20 +76,34 @@ export const postRouter = createTRPCRouter({
     })
   }),
 
-  like: protectedProcedure.input(ReactPostApiInput).mutation(async ({ ctx, input }) => {
+  react: protectedProcedure.input(ReactPostApiInput).mutation(async ({ ctx, input }) => {
     try {
+      const hasRecord = await ctx.db.query.reactions.findFirst({
+        where: and(eq(schema.reactions.userId, ctx.auth.userId!), eq(schema.reactions.postId, input.postId)),
+        columns: { type: true, id: true }
+      })
+      console.log(hasRecord, hasRecord?.type, input.type)
+      if (hasRecord && hasRecord.type !== input.type) {
+        return await ctx.db.update(schema.reactions).set({
+          type: input.type
+        }).where(eq(schema.reactions.id, hasRecord.id))
+      }
       return await ctx.db.insert(schema.reactions).values({
         id: uuidv4(),
-        type: "like",
+        type: input.type,
         postId: input.postId,
         userId: ctx.auth.userId!
       })
+
+
     } catch (error) {
       if (error!.toString().includes("duplicate key value violates unique constraint ")) {
-        return await ctx.db.delete(schema.reactions).where(and(
-          eq(schema.reactions.userId, ctx.auth.userId!),
-          eq(schema.reactions.postId, input.postId)
-        ))
+        return await ctx.db.delete(schema.reactions).where(
+          and(
+            eq(schema.reactions.userId, ctx.auth.userId!),
+            eq(schema.reactions.postId, input.postId)
+          )
+        )
       }
     }
   })
