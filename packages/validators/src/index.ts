@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+import { vailadationType } from '@stockHub/db'
 
 // CreatePostSchema
 export const CreatePostFormSchema = z.object({
@@ -56,3 +56,9 @@ export const RegisterFormScehma = z.object({
 })
 
 export type RegisterSchema = z.infer<typeof RegisterFormScehma>
+
+
+export const ReactPostApiInput = vailadationType.inserReactionSchema.pick({
+  postId: true,
+})
+

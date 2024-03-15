@@ -3,16 +3,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FlashList } from '@shopify/flash-list';
 import { PostProps } from '../commons/post';
 import { Image } from 'expo-image';
-import { files } from '@stockHub/db/src/schema/schema';
 
 
-type PostImagesProps = FlashList<PostProps['files']> & {
+type PostImagesProps = {
   active: number,
   setActive: (num: number) => void
   images: PostProps['files']
 }
 
-const PostImages = ({ active, setActive, images, ...props }: PostImagesProps) => {
+const PostImages = ({ active, setActive, images, }: PostImagesProps) => {
   const { width } = useWindowDimensions()
 
   const scrollRef = useRef(null)
@@ -36,7 +35,6 @@ const PostImages = ({ active, setActive, images, ...props }: PostImagesProps) =>
         pagingEnabled
         bounces={false}
         showsHorizontalScrollIndicator={false}
-        {...props}
       />
     </View >
 
@@ -53,7 +51,7 @@ const RenderItem = ({ item, priority }: { item: PostProps['files'][0], priority:
     RnImage.getSize(item.url || "", (width, height) => {
       setImageDimensions({ width, height })
     })
-  }, [files])
+  }, [item])
 
   // TODO: make height calculations cleaner and terse
   const maxHeight = Math.floor(screenWidth * (3 / 4)) || 250

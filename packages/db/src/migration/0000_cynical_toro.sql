@@ -61,12 +61,13 @@ CREATE TABLE IF NOT EXISTS "userIntrests" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"userId" text NOT NULL,
+	"id" uuid,
+	"userId" text PRIMARY KEY NOT NULL,
 	"createdAt" timestamp DEFAULT now(),
 	CONSTRAINT "users_userId_unique" UNIQUE("userId")
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "reactions_postId_userId_index" ON "reactions" ("postId","userId");--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "postToHashTag" ADD CONSTRAINT "postToHashTag_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION

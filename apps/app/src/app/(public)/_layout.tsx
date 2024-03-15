@@ -24,6 +24,18 @@ const PublicLayout = () => {
         options={{
           headerTitle: 'Create Account',
         }} />
+      <Stack.Screen
+        name="verification"
+        options={{
+          headerTitle: 'Verifiy your account',
+        }} />
+      <Stack.Screen
+        name="authHome"
+        options={{
+          headerShown: false
+        }} />
+
+
     </Stack>
   );
 };

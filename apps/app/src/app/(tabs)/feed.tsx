@@ -1,5 +1,5 @@
 import { FlashList } from "@shopify/flash-list";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Loader from "~/components/commons/loader";
 import Post from "~/components/commons/post";
@@ -21,11 +21,20 @@ const FeedScreen = () => {
         ItemSeparatorComponent={() => <View className="h-2" />}
         renderItem={({ item }) => <Post {...item} />}
         estimatedItemSize={400}
+        ListHeaderComponent={() => <FeedHeader />}
       />
     </SafeAreaView>
   )
 };
 
+
+const FeedHeader = () => {
+  return (
+    <View className="h-20 flex flex-row items-center justify-center">
+      <Text className="text-white font-extrabold text-center font-mono text-2xl">Feed</Text>
+    </View>
+  )
+}
 
 
 

@@ -1,12 +1,7 @@
-import { FontAwesome6, Fontisto, SimpleLineIcons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { View, Text, Pressable } from 'react-native'
 import { api } from '~/utils/api'
-import Pagination from '../onboarding/pagiantion';
-import { files, posts } from '@stockHub/db/src/schema/schema';
 import { useState } from 'react';
 import PostImages from '../post/images';
-import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import PostDetails from '../post/postDetails';
 import PostAction from '../post/postAction';
 import PostUserDetails from '../post/postUserDetails';
@@ -23,7 +18,8 @@ const Post = ({
   description,
   author,
   fromNow,
-  files
+  files,
+  likes
 }: PostProps) => {
   const [activeSlide, setActiveSlide] = useState<number>(0)
 
@@ -42,11 +38,12 @@ const Post = ({
       <PostAction
         postLength={files.length}
         activeSlide={activeSlide}
+        postId={id}
       />
       <PostDetails
         tittle={tittle}
         description={description}
-        key={posts.id}
+        key={id}
       />
     </View >
   )

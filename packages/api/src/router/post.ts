@@ -1,6 +1,6 @@
 import { schema } from "@stockHub/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { CreatePostApi } from "@stockHub/validators";
+import { CreatePostApi, ReactPostApiInput } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
 import { clerkClient } from '@clerk/nextjs';
 import { User } from "@clerk/nextjs/dist/types/server";
@@ -16,7 +16,7 @@ export const postRouter = createTRPCRouter({
       id: uuidv4(),
       tittle: input.title,
       description: input.content,
-      authorId: ctx.session.userId,
+      authorId: ctx.auth.userId!,
     }).returning({ postId: schema.posts.id })
 
     const file = await ctx.db.insert(schema.files).values(input.file.map<InsertFiles>((f) => {
@@ -74,7 +74,18 @@ export const postRouter = createTRPCRouter({
         author: userData[post.authorId],
       }
     })
+  }),
+
+  like: protectedProcedure.input(ReactPostApiInput).mutation(async ({ ctx, input }) => {
+    console.log('adding like');
+    return ctx.db.insert(schema.reactions).values({
+      id: uuidv4(),
+      type: "like",
+      postId: input.postId,
+      userId: ctx.auth.userId!
+    })
   })
+
 })
 
 

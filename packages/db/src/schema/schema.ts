@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 
 // Users schema
 export const users = pgTable("users", {
@@ -52,7 +52,11 @@ export const reactions = pgTable("reactions", ({
   userId: text("userId").notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   // updatedAt: timestamp('updated_at').default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`),
+}), (t) => ({
+  unq: uniqueIndex().on(t.postId, t.userId),
 }))
+
+
 
 export const reactionsRelations = relations(reactions, ({ one }) => ({
   post: one(posts, {
@@ -60,7 +64,7 @@ export const reactionsRelations = relations(reactions, ({ one }) => ({
     fields: [reactions.postId]
   }),
   user: one(users, {
-    references: [users.id],
+    references: [users.userId],
     fields: [reactions.userId]
   })
 }))

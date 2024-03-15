@@ -1,5 +1,5 @@
 {
-  "id": "4a63d576-7be1-478d-a643-bce822d10f12",
+  "id": "7c20b024-db4a-4395-ac25-83f7402d9f9f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -292,7 +292,16 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "reactions_postId_userId_index": {
+          "name": "reactions_postId_userId_index",
+          "columns": [
+            "postId",
+            "userId"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
@@ -361,13 +370,13 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": false
         },
         "userId": {
           "name": "userId",
           "type": "text",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "createdAt": {
