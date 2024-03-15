@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { clerkClient } from '@clerk/nextjs';
 import { User } from "@clerk/nextjs/dist/types/server";
 import moment from "moment";
-
+import { eq, and } from 'drizzle-orm'
 
 type InsertFiles = typeof schema.files.$inferInsert
 
@@ -77,13 +77,21 @@ export const postRouter = createTRPCRouter({
   }),
 
   like: protectedProcedure.input(ReactPostApiInput).mutation(async ({ ctx, input }) => {
-    console.log('adding like');
-    return ctx.db.insert(schema.reactions).values({
-      id: uuidv4(),
-      type: "like",
-      postId: input.postId,
-      userId: ctx.auth.userId!
-    })
+    try {
+      return await ctx.db.insert(schema.reactions).values({
+        id: uuidv4(),
+        type: "like",
+        postId: input.postId,
+        userId: ctx.auth.userId!
+      })
+    } catch (error) {
+      if (error!.toString().includes("duplicate key value violates unique constraint ")) {
+        return await ctx.db.delete(schema.reactions).where(and(
+          eq(schema.reactions.userId, ctx.auth.userId!),
+          eq(schema.reactions.postId, input.postId)
+        ))
+      }
+    }
   })
 
 })
