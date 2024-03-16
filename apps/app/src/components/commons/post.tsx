@@ -19,7 +19,7 @@ const Post = ({
   author,
   fromNow,
   files,
-  likes
+  hasReacted
 }: PostProps) => {
   const [activeSlide, setActiveSlide] = useState<number>(0)
 
@@ -39,6 +39,7 @@ const Post = ({
         postLength={files.length}
         activeSlide={activeSlide}
         postId={id}
+        hasReacted={hasReacted}
       />
       <PostDetails
         tittle={tittle}

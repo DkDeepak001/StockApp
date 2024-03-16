@@ -1,6 +1,6 @@
 import { View, Pressable } from 'react-native'
 import React from 'react'
-import { FontAwesome6, SimpleLineIcons } from '@expo/vector-icons'
+import { FontAwesome, FontAwesome6, Foundation, SimpleLineIcons } from '@expo/vector-icons'
 import Pagination from '../onboarding/pagiantion'
 import { api } from '~/utils/api'
 import { ReactPostApiInputType } from '@stockHub/validators'
@@ -8,11 +8,17 @@ type PostActionProps = {
   activeSlide: number
   postLength: number
   postId: string
+  hasReacted: string | null | undefined
 }
 
-const PostAction = ({ activeSlide, postLength, postId }: PostActionProps) => {
+const PostAction = ({ activeSlide, postLength, postId, hasReacted }: PostActionProps) => {
 
-  const { mutateAsync: addLike } = api.post.react.useMutation()
+  const context = api.useUtils()
+  const { mutateAsync: addLike } = api.post.react.useMutation({
+    onSuccess: () => {
+      context.post.all.invalidate()
+    }
+  })
 
   const handleReaction = async (type: Pick<ReactPostApiInputType, "type">) => {
     try {
@@ -27,19 +33,19 @@ const PostAction = ({ activeSlide, postLength, postId }: PostActionProps) => {
   }
   return (
     <View className='w-full flex flex-row items-center justify-between  px-4 '>
-      <View className='flex flex-row gap-x-5 items-center w-1/4 justify-evenly'>
+      <View className='flex flex-row gap-x-2 items-center w-1/4 justify-evenly'>
         <Pressable
           onPress={() => handleReaction({ type: 'like' })}
-          className='bg-black p-4 rounded-full'
+          className=' p-3 rounded-full '
         >
-          <SimpleLineIcons name="like" size={24} color="white" />
+          <FontAwesome name={hasReacted === "like" ? 'thumbs-up' : 'thumbs-o-up'} size={30} color="white" />
         </Pressable>
 
         <Pressable
           onPress={() => handleReaction({ type: 'dislikes' })}
-          className='bg-black p-4 rounded-full'
+          className=' p-3 rounded-full  '
         >
-          <SimpleLineIcons name="dislike" size={24} color="white" />
+          <FontAwesome name={hasReacted === "dislikes" ? "thumbs-down" : "thumbs-o-down"} size={30} color="white" />
         </Pressable>
       </View>
 
