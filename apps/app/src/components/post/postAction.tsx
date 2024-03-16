@@ -18,6 +18,16 @@ const PostAction = ({ activeSlide, postLength, postId, hasReacted }: PostActionP
   const { mutateAsync: addLike } = api.post.react.useMutation({
     onMutate: async (variable) => {
       await context.post.all.cancel()
+      await context.post.byId.cancel()
+
+      context.post.byId.setData({ id: postId }, (prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          hasReacted: prev.hasReacted === variable.type ? undefined : prev.hasReacted === "like" && variable.type === "dislikes" ? "dislikes" : !prev.hasReacted && variable.type === "dislikes" ? "dislikes" : "like"
+        }
+
+      })
 
       context.post.all.setData(undefined, (prev) => {
         if (!prev) return prev
