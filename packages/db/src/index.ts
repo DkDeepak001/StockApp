@@ -11,7 +11,8 @@ export const db = drizzle(sql, { schema: schemas });
 
 
 export const vailadationType = {
-  inserReactionSchema: createInsertSchema(schema.reactions)
+  insertReaction: createInsertSchema(schema.reactions),
+  insertComment: createInsertSchema(schema.comments)
 }
 
 

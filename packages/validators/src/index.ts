@@ -58,9 +58,16 @@ export const RegisterFormScehma = z.object({
 export type RegisterSchema = z.infer<typeof RegisterFormScehma>
 
 
-export const ReactPostApiInput = vailadationType.inserReactionSchema.pick({
+export const ReactPostApiInput = vailadationType.insertReaction.pick({
   postId: true,
   type: true
+})
+
+export const AddCommentApiInput = vailadationType.insertComment.pick({
+  postId: true,
+  comment: true,
+}).refine((data) => data.comment.length < 250, {
+  message: "250 Charcters are allowed in commets"
 })
 
 

@@ -1,6 +1,6 @@
 import { View, Pressable } from 'react-native'
 import React from 'react'
-import { FontAwesome, FontAwesome6, Foundation, SimpleLineIcons } from '@expo/vector-icons'
+import { FontAwesome, FontAwesome6 } from '@expo/vector-icons'
 import Pagination from '../onboarding/pagiantion'
 import { api } from '~/utils/api'
 import { ReactPostApiInputType } from '@stockHub/validators'
