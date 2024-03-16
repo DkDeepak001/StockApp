@@ -14,25 +14,20 @@ type PostImagesProps = {
 }
 
 const PostImages = ({ postId, active, setActive, images, }: PostImagesProps) => {
-  const segments = useSegments()
-
   const { width } = useWindowDimensions()
-
   const scrollRef = useRef(null)
-
-
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     setActive(Math.round(e.nativeEvent.contentOffset.x / (width + 20)))
   }
 
   return (
-    <Pressable className='bg-black ' onPress={() => segments[0] === "(tabs)" && router.push(`/post/${postId}`)}>
+    <View className='bg-black'>
       <FlashList
         initialScrollIndex={active}
         estimatedItemSize={width * images.length}
         data={images}
         ref={scrollRef}
-        renderItem={({ item, index }: { item: PostProps['files'][0], index: number }) => <RenderItem item={item} priority={index === 0} />}
+        renderItem={({ item, index }: { item: PostProps['files'][0], index: number }) => <RenderItem item={item} priority={index === 0} postId={postId} />}
         keyExtractor={(item) => item.id!}
         horizontal
         onScroll={handleScroll}
@@ -40,12 +35,13 @@ const PostImages = ({ postId, active, setActive, images, }: PostImagesProps) => 
         bounces={false}
         showsHorizontalScrollIndicator={false}
       />
-    </Pressable >
+    </View >
 
   )
 }
 
-const RenderItem = ({ item, priority }: { item: PostProps['files'][0], priority: boolean }) => {
+const RenderItem = ({ item, priority, postId }: { item: PostProps['files'][0], priority: boolean, postId: string }) => {
+  const segments = useSegments()
   const { width: screenWidth } = useWindowDimensions()
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
@@ -57,19 +53,20 @@ const RenderItem = ({ item, priority }: { item: PostProps['files'][0], priority:
     })
   }, [item])
 
-  // TODO: make height calculations cleaner and terse
   const maxHeight = Math.floor(screenWidth * (3 / 4)) || 250
-
   const displayHeight =
     Math.floor(
       (screenWidth / imageDimensions.width) * imageDimensions.height,
     ) || 250
-
   const computedHeight = Math.floor(
     (screenWidth / imageDimensions.width) * imageDimensions.height,
   )
+
   return (
-    <View className="h-80 items-center flex flex-row">
+    <Pressable className="h-80 items-center flex flex-row"
+      onPress={() => segments[0] === "(tabs)" && router.push(`/post/${postId}`)}
+
+    >
       <Image
         source={{ uri: item.url! }}
         style={{
@@ -83,7 +80,7 @@ const RenderItem = ({ item, priority }: { item: PostProps['files'][0], priority:
 
         contentFit='contain'
       />
-    </View>
+    </Pressable>
   )
 }
 
