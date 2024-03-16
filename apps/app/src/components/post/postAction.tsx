@@ -4,6 +4,7 @@ import { FontAwesome, FontAwesome6, Foundation, SimpleLineIcons } from '@expo/ve
 import Pagination from '../onboarding/pagiantion'
 import { api } from '~/utils/api'
 import { ReactPostApiInputType } from '@stockHub/validators'
+
 type PostActionProps = {
   activeSlide: number
   postLength: number
@@ -15,8 +16,28 @@ const PostAction = ({ activeSlide, postLength, postId, hasReacted }: PostActionP
 
   const context = api.useUtils()
   const { mutateAsync: addLike } = api.post.react.useMutation({
-    onSuccess: () => {
-      context.post.all.invalidate()
+    onMutate: async (variable) => {
+      await context.post.all.cancel()
+
+      context.post.all.setData(undefined, (prev) => {
+        if (!prev) return prev
+        return prev.map(p => {
+          if (p.id !== postId) return p
+          return {
+            ...p,
+            hasReacted: p.hasReacted === variable.type ? undefined : p.hasReacted === "like" && variable.type === "dislikes" ? "dislikes" : !p.hasReacted && variable.type === "dislikes" ? "dislikes" : "like"
+          }
+        })
+      })
+    },
+    onError: (err, _, ctx) => {
+      if (ctx) {
+        context.post.all.setData(undefined, ctx)
+      }
+      console.log(err)
+    },
+    onSettled: async () => {
+      await context.post.all.invalidate()
     }
   })
 
