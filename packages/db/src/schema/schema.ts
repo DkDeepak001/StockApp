@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text, timestamp, uuid, varchar, pgEnum, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, timestamp, varchar, pgEnum, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
 
 // Users schema
 export const users = pgTable("users", {
-  id: uuid("id"),
+  id: text("id"),
   userId: text("userId").unique().notNull().primaryKey(),
   createdAt: timestamp('createdAt').defaultNow()
 })
@@ -18,7 +18,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 // Post schema
 export const posts = pgTable("posts", {
-  id: uuid("id").primaryKey(),
+  id: text("id").primaryKey(),
   tittle: varchar("tittle", { length: 256 }).notNull(),
   authorId: text('authorId').notNull(),
   description: text("description"),
@@ -46,7 +46,7 @@ export const postRelations = relations(posts, ({ one, many }) => ({
 export const reactionsType = pgEnum('reactionsType', ["like", "dislikes"])
 
 export const reactions = pgTable("reactions", ({
-  id: uuid('id').primaryKey(),
+  id: text('id').primaryKey(),
   type: reactionsType("reactionsType"),
   postId: text("postId").notNull(),
   userId: text("userId").notNull(),
@@ -73,9 +73,9 @@ export const reactionsRelations = relations(reactions, ({ one }) => ({
 // COMMENTS Schema 
 
 export const comments = pgTable("comments", {
-  id: uuid("id").primaryKey(),
+  id: text("id").primaryKey(),
   comment: text("comment").notNull(),
-  postId: uuid("postId").notNull(),
+  postId: text("postId").notNull(),
   userId: text("userId").notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 
@@ -87,7 +87,7 @@ export const commentsRelations = relations(comments, ({ one }) => ({
     fields: [comments.postId]
   }),
   user: one(users, {
-    references: [users.id],
+    references: [users.userId],
     fields: [comments.userId]
   })
 }))
@@ -96,7 +96,7 @@ export const commentsRelations = relations(comments, ({ one }) => ({
 
 // Hashtag Schema
 export const hashTag = pgTable("hashTag", {
-  id: uuid("id").primaryKey().notNull(),
+  id: text("id").primaryKey().notNull(),
   name: text("name").unique()
 })
 
@@ -108,8 +108,8 @@ export const hashTagRelation = relations(hashTag, ({ many }) => ({
 
 //post to hashTag relation
 export const postToHashTag = pgTable("postToHashTag", {
-  postId: uuid("postId").references(() => posts.id),
-  hashTagId: uuid('tagId').references(() => hashTag.id)
+  postId: text("postId").references(() => posts.id),
+  hashTagId: text('tagId').references(() => hashTag.id)
 }, (t) => ({
   pk: primaryKey({ columns: [t.hashTagId, t.postId] })
 }))
@@ -128,8 +128,8 @@ export const postToHashTagRelation = relations(postToHashTag, ({ one }) => ({
 
 // Users Intrests Table 
 export const userToHashTag = pgTable("userIntrests", {
-  userId: uuid("userId").references(() => users.id),
-  hashTagId: uuid('tagId').references(() => hashTag.id)
+  userId: text("userId").references(() => users.id),
+  hashTagId: text('tagId').references(() => hashTag.id)
 }, (t) => ({
   pk: primaryKey({ columns: [t.hashTagId, t.userId] })
 }))
@@ -147,11 +147,11 @@ export const userToHashTagRelation = relations(userToHashTag, ({ one }) => ({
 
 
 export const files = pgTable("file", {
-  id: uuid("id").primaryKey(),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   url: text("url").notNull().unique(),
   path: text("filePath").notNull(),
-  postId: uuid("postId"),
+  postId: text("postId"),
   height: integer("height").default(0),
   width: integer("weight").default(0),
   createdAt: timestamp('created_at').defaultNow(),
