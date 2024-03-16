@@ -10,7 +10,7 @@ import PostUserDetails from '../post/postUserDetails';
 export type PostProps = NonNullable<ArrayElement<Exclude<ReturnType<ReturnType<typeof api.useUtils>['post']['all']['getData']>, undefined>>> | NonNullable<ReturnType<ReturnType<typeof api.useUtils>['post']['byId']['getData']>>;
 
 
-type ArrayElement<ArrayType extends readonly unknown[]> =
+export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 const Post = ({
