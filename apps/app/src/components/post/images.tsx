@@ -1,17 +1,21 @@
-import { View, Image as RnImage, useWindowDimensions, NativeSyntheticEvent, NativeScrollEvent, StyleSheet } from 'react-native'
+import { View, Image as RnImage, useWindowDimensions, NativeSyntheticEvent, NativeScrollEvent, StyleSheet, Pressable } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { FlashList } from '@shopify/flash-list';
 import { PostProps } from '../commons/post';
 import { Image } from 'expo-image';
+import { router, useSegments } from 'expo-router';
 
 
 type PostImagesProps = {
+  postId: string
   active: number,
   setActive: (num: number) => void
   images: PostProps['files']
 }
 
-const PostImages = ({ active, setActive, images, }: PostImagesProps) => {
+const PostImages = ({ postId, active, setActive, images, }: PostImagesProps) => {
+  const segments = useSegments()
+
   const { width } = useWindowDimensions()
 
   const scrollRef = useRef(null)
@@ -22,7 +26,7 @@ const PostImages = ({ active, setActive, images, }: PostImagesProps) => {
   }
 
   return (
-    <View className='bg-black '>
+    <Pressable className='bg-black ' onPress={() => segments[0] === "(tabs)" && router.push(`/post/${postId}`)}>
       <FlashList
         initialScrollIndex={active}
         estimatedItemSize={width * images.length}
@@ -36,7 +40,7 @@ const PostImages = ({ active, setActive, images, }: PostImagesProps) => {
         bounces={false}
         showsHorizontalScrollIndicator={false}
       />
-    </View >
+    </Pressable >
 
   )
 }

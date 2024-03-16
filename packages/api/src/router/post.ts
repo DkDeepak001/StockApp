@@ -6,14 +6,13 @@ import { clerkClient } from '@clerk/nextjs';
 import { User } from "@clerk/nextjs/dist/types/server";
 import moment from "moment";
 import { eq, and, sql } from 'drizzle-orm'
-import { reactions } from "@stockHub/db/src/schema/schema";
+import { z } from "zod";
 
 type InsertFiles = typeof schema.files.$inferInsert
 
 export const postRouter = createTRPCRouter({
   add: protectedProcedure.input(CreatePostApi).mutation(async ({ input, ctx }) => {
     try {
-
       const post = await ctx.db.insert(schema.posts).values({
         id: uuidv4(),
         tittle: input.title,
@@ -42,6 +41,7 @@ export const postRouter = createTRPCRouter({
       console.log(error)
     }
   }),
+
   all: protectedProcedure.query(async ({ ctx }) => {
     try {
       const posts = await ctx.db.query.posts.findMany({
@@ -148,6 +148,41 @@ export const postRouter = createTRPCRouter({
 
     } catch (error) {
       console.log(error)
+    }
+  }),
+  byId: protectedProcedure.input(z.object({
+    id: z.string()
+  })).query(async ({ input, ctx }) => {
+    const post = await ctx.db.query.posts.findFirst({
+      where: eq(schema.posts.id, input.id),
+      with: {
+        files: true,
+        author: true,
+        comments: true
+      }
+    })
+    if (!post) return
+
+    const reaction = await ctx.db.query.reactions.findFirst({
+      where: and(eq(schema.reactions.postId, post?.id!), eq(schema.reactions.userId, ctx.auth.userId!))
+    })
+
+    const u: ReturnUserType = await clerkClient.users.getUser(post.authorId)
+    return {
+      ...post,
+      hasReacted: reaction?.type,
+      fromNow: moment(post.createdAt!).fromNow() ?? '',
+      author: {
+        imageUrl: u.imageUrl,
+        id: u.id,
+        hasImage: u.hasImage,
+        gender: u.gender,
+        username: u.username,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        emailAddresses: u.emailAddresses,
+        publicMetadata: u.publicMetadata
+      } as ReturnUserType
     }
   })
 

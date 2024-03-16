@@ -7,7 +7,8 @@ import PostAction from '../post/postAction';
 import PostUserDetails from '../post/postUserDetails';
 
 
-export type PostProps = NonNullable<ArrayElement<Exclude<ReturnType<ReturnType<typeof api.useUtils>['post']['all']['getData']>, undefined>>>;
+export type PostProps = NonNullable<ArrayElement<Exclude<ReturnType<ReturnType<typeof api.useUtils>['post']['all']['getData']>, undefined>>> | NonNullable<ReturnType<ReturnType<typeof api.useUtils>['post']['byId']['getData']>>;
+
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
@@ -31,6 +32,7 @@ const Post = ({
       />
       <PostImages
         images={files}
+        postId={id}
         setActive={(num: number) => setActiveSlide(num)}
         active={activeSlide}
       />
@@ -46,7 +48,7 @@ const Post = ({
         description={description}
         key={id}
       />
-    </View >
+    </View>
   )
 }
 
