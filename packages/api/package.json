@@ -21,10 +21,11 @@
     "@stockHub/validators": "*",
     "@trpc/client": "^10.14.0",
     "@trpc/server": "^10.14.0",
+    "@upstash/kafka": "^1.3.5",
+    "drizzle-orm": "^0.29.3",
     "moment": "^2.30.1",
     "superjson": "1.9.1",
     "uuid": "^9.0.1",
-    "drizzle-orm": "^0.29.3",
     "zod": "^3.20.6"
   },
   "devDependencies": {

@@ -7,6 +7,7 @@ import { User } from "@clerk/nextjs/dist/types/server";
 import moment from "moment";
 import { eq, and, sql } from 'drizzle-orm'
 import { z } from "zod";
+import { sendHashTag } from "../utils/kafka";
 
 type InsertFiles = typeof schema.files.$inferInsert
 
@@ -33,6 +34,11 @@ export const postRouter = createTRPCRouter({
         }
       })
       )
+      await sendHashTag({
+        data: {
+          message: input.content
+        }
+      })
       return {
         ...post,
         files: file

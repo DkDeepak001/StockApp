@@ -17,6 +17,13 @@ export const env = createEnv({
     DB_NAME: z.string(),
     DB_PASSWORD: z.string(),
     DB_USERNAME: z.string(),
+    DB_URL: z.string(),
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    CLERK_SECRET_KEY: z.string(),
+    KAFKA_URL: z.string(),
+    KAFKA_USERNAME: z.string(),
+    KAFKA_PASSWORD: z.string()
+
   },
   /**
    * Specify your client-side environment variables schema here.
