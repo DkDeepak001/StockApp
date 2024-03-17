@@ -1,6 +1,4 @@
 import { z } from "zod";
-import { vailadationType } from '@stockHub/db'
-
 // CreatePostSchema
 export const CreatePostFormSchema = z.object({
   title: z.string().min(1, {
@@ -58,17 +56,15 @@ export const RegisterFormScehma = z.object({
 export type RegisterSchema = z.infer<typeof RegisterFormScehma>
 
 
-export const ReactPostApiInput = vailadationType.insertReaction.pick({
-  postId: true,
-  type: true
+
+export const ReactPostApiInput = z.object({
+  postId: z.string(),
+  type: z.enum(["like", "dislikes"])
 })
 
-export const AddCommentApiInput = vailadationType.insertComment.pick({
-  postId: true,
-  comment: true,
-}).refine((data) => data.comment.length < 250, {
-  message: "250 Charcters are allowed in commets"
+export const AddCommentApiInput = z.object({
+  postId: z.string(),
+  comment: z.string()
 })
-
 
 export type ReactPostApiInputType = z.infer<typeof ReactPostApiInput>
