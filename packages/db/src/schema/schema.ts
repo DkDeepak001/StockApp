@@ -97,7 +97,7 @@ export const commentsRelations = relations(comments, ({ one }) => ({
 // Hashtag Schema
 export const hashTag = pgTable("hashTag", {
   id: text("id").primaryKey().notNull(),
-  name: text("name").unique()
+  name: text("name").unique().notNull()
 })
 
 export const hashTagRelation = relations(hashTag, ({ many }) => ({
