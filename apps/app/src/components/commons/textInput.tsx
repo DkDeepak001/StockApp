@@ -3,7 +3,7 @@ import {
   TextInputProps,
   TextInput,
   Text,
-  View
+  View,
 } from "react-native"
 
 type FormInputType<T extends FieldValues> = TextInputProps & {
@@ -43,4 +43,5 @@ export const BasicInput = ({ className, ...props }: TextInputProps) => {
     </View>
   )
 }
+
 
