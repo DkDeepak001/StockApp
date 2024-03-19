@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, FlatList, Pressable } from 'react-native'
-import React from 'react'
-import { router, useLocalSearchParams } from 'expo-router'
+import React, { useEffect } from 'react'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { api } from '~/utils/api'
 import { StockDetails, HashtagDetails } from '~/components/hashtag/header'
 import { Image } from 'expo-image'
@@ -9,14 +9,27 @@ import { renderPart } from '~/components/post/postDetails'
 import Loader from '~/components/commons/loader'
 const Tags = () => {
   const { id } = useLocalSearchParams()
+  const navigation = useNavigation()
   const { data: tag, isLoading, refetch, isRefetching, isInitialLoading } = api.hashTag.byId.useQuery({ id: id as string })
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: tag?.name?.[0]?.toUpperCase()! + tag?.name?.slice(1)!
+    })
+  }, [])
+
   if (isLoading) {
     return <Loader />
   }
   if (!tag) return
   return (
     <FlatList
-      ListHeaderComponent={tag?.isStock ? <StockDetails {...tag.stock!} /> : <HashtagDetails {...tag} />}
+      ListHeaderComponent={
+        <>
+          {tag?.isStock ? <StockDetails {...tag.stock!} /> : <HashtagDetails {...tag} />}
+          <Text className='text-white font-bold text-2xl my-1 px-10'>Posts about {tag.name}</Text>
+        </>
+      }
       data={tag.posts ?? []}
       contentContainerStyle={{
         width: '100%',
