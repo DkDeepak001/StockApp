@@ -6,8 +6,6 @@ import { StockDetails, HashtagDetails } from '~/components/hashtag/header'
 const Tags = () => {
   const { id } = useLocalSearchParams()
   const { data: tag } = api.hashTag.byId.useQuery({ id: id as string })
-  console.log(tag)
-
   return (
     <ScrollView contentContainerStyle={{ alignItems: "center" }} className='flex-1'>
       <View className='flex w-full items-center'>

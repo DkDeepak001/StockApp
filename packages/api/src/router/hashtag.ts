@@ -15,9 +15,15 @@ export const hashTagRouter = createTRPCRouter({
     try {
       const tag = await ctx.db.query.hashTag.findFirst({
         where: eq(schema.hashTag.id, input.id),
+        with: {
+          posts: {
+            with: {
+              post: true
+            }
+          }
+        }
       })
       const stock = await nseIndia.getEquityDetails(tag?.name!)
-      console.log(stock)
       return {
         ...tag,
         isStock: stock.info ? true : false,
