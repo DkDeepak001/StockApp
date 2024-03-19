@@ -1,4 +1,6 @@
 import { Kafka } from "@upstash/kafka";
+import fetch from "node-fetch";
+
 const kafka = new Kafka({
   url: process.env.KAFKA_URL!,
   username: process.env.KAFKA_USERNAME!,
@@ -7,7 +9,7 @@ const kafka = new Kafka({
 
 const c = kafka.consumer();
 
-const apiUrl = 'http://localhost:3000/api/hashtag'
+const apiUrl = 'http://localhost:3000/api/hashtag';
 
 async function main() {
   try {
@@ -17,47 +19,61 @@ async function main() {
       topics: ["hashtag"],
       autoOffsetReset: "earliest",
     });
-    console.log("Recived messages", messages)
+    console.log("Received messages", messages);
 
     let parsedResults: parsedResultType[] = [];
     const mentionRegEx = /\(([-0-9a-fA-F]+)\)/g;
+    const hashTagRegEx = /\[([^[\]]+)\]/g;
 
     messages.forEach(message => {
       const { postId, description } = JSON.parse(message.value) as messageType['data'];
-      const parsedText: string[] = [];
+      const hashtag: { uuids: string, parsedText: string }[] = [];
       let match;
+
+      // Extract UUIDs
+      const parsedUUIDs: string[] = [];
       while ((match = mentionRegEx.exec(description)) !== null) {
+        parsedUUIDs.push(match[1]);
+      }
+
+      // Extract text containing hashtags
+      const parsedText: string[] = [];
+      while ((match = hashTagRegEx.exec(description)) !== null) {
         parsedText.push(match[1]);
       }
-      parsedResults.push({ postId, uuid: parsedText });
+
+      // Populate the hashtag array
+      parsedUUIDs.forEach((uuid, index) => {
+        console.log(uuid, parsedText[index])
+        hashtag.push({ uuids: uuid, parsedText: parsedText[index] });
+      });
+      parsedResults.push({ postId, hashtag });
     });
 
     if (parsedResults.length >= 1) {
-      console.log("sending")
       await fetch(apiUrl, {
         method: "POST",
         body: JSON.stringify(parsedResults)
-      })
+      });
     }
   } catch (error) {
     console.log(error);
   }
 }
 
-// Call main function initially
 main();
 
-// Call main function every minute
-setInterval(main, 6000); // 60000 milliseconds = 1 minute
+setInterval(main, 6000);
 
 type parsedResultType = {
   postId: string,
-  uuid: string[]
-}
+  hashtag: { uuids: string, parsedText: string }[]
+};
+
 type messageType = {
   data: {
-    postId: string
-    description: string
-  }
-}
+    postId: string;
+    description: string;
+  };
+};
 
