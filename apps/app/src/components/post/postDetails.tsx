@@ -7,6 +7,7 @@ import {
   parseValue,
   isMentionPartType,
 } from 'react-native-controlled-mentions';
+import { router } from 'expo-router';
 
 type PostDetailsProps = Pick<PostProps, 'tittle' | "description">
 
@@ -27,7 +28,7 @@ const PostDetails = ({ description, tittle }: PostDetailsProps) => {
           style={part.partType.textStyle, {
             color: "blue"
           }}
-          onPress={() => console.log('Pressed', part.data)}
+          onPress={() => router.push(`/tag/${part.data?.id!}`)}
         >
           {part.text}
         </Text>
