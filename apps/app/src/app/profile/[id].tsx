@@ -9,6 +9,7 @@ import { Button } from '~/components/commons/button'
 const Profile = () => {
   const { id } = useLocalSearchParams()
   const { data: user, isLoading } = api.user.byId.useQuery({ id: id as string })
+  const { data: stock } = api.stock.bySymbol.useQuery({ symbol: "" })
   if (isLoading) {
     return (
       <Loader>
