@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { eq } from "drizzle-orm";
 import { schema } from "@stockHub/db";
 import { NseIndia } from "stock-nse-india";
+import moment from "moment";
 const nseIndia = new NseIndia()
 
 export const hashTagRouter = createTRPCRouter({
@@ -18,7 +19,11 @@ export const hashTagRouter = createTRPCRouter({
         with: {
           posts: {
             with: {
-              post: true
+              post: {
+                with: {
+                  files: true
+                }
+              }
             }
           }
         }
@@ -26,6 +31,14 @@ export const hashTagRouter = createTRPCRouter({
       const stock = await nseIndia.getEquityDetails(tag?.name!)
       return {
         ...tag,
+        posts: tag?.posts.map(p => {
+          return {
+            ...p, post: {
+              ...p.post,
+              fromNow: moment(p.post?.createdAt).fromNow()
+            }
+          }
+        }),
         isStock: stock.info ? true : false,
         stock: stock.info ? stock : null
       }

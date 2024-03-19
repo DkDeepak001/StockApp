@@ -71,7 +71,6 @@ export const HashtagDetails = ({ name, id }: HashtagDetailsProps) => {
         <Button variants='fill' className='h-10 w-2/4'>
           <Text className='font-bold text-sm uppercase text-black'>Follow</Text>
         </Button>
-
       </View>
     </View>
   )

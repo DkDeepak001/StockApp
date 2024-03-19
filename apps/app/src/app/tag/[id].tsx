@@ -1,18 +1,46 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, FlatList, Pressable } from 'react-native'
 import React from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { api } from '~/utils/api'
 import { StockDetails, HashtagDetails } from '~/components/hashtag/header'
+import { Image } from 'expo-image'
+import { parseValue } from 'react-native-controlled-mentions'
+import { renderPart } from '~/components/post/postDetails'
+import Loader from '~/components/commons/loader'
 const Tags = () => {
   const { id } = useLocalSearchParams()
-  const { data: tag } = api.hashTag.byId.useQuery({ id: id as string })
+  const { data: tag, isLoading, refetch, isRefetching, isInitialLoading } = api.hashTag.byId.useQuery({ id: id as string })
+  if (isLoading) {
+    return <Loader />
+  }
+  if (!tag) return
   return (
-    <ScrollView contentContainerStyle={{ alignItems: "center" }} className='flex-1'>
-      <View className='flex w-full items-center'>
-        {tag?.isStock ? <StockDetails {...tag.stock!} /> : <HashtagDetails {...tag} />}
-      </View>
+    <FlatList
+      ListHeaderComponent={tag?.isStock ? <StockDetails {...tag.stock!} /> : <HashtagDetails {...tag} />}
+      data={tag.posts ?? []}
+      contentContainerStyle={{
+        width: '100%',
+        rowGap: 20
+      }}
+      refreshing={!isInitialLoading && isRefetching}
+      onRefresh={refetch}
+      renderItem={({ item }) => {
+        const { parts } = parseValue(item.post?.description!, [{ trigger: "#" }])
 
-    </ScrollView >
+        return (
+          <Pressable className='flex flex-row gap-x-4 w-full px-10'
+            onPress={() => router.push(`/post/${item.postId}`)}
+          >
+            <Image source={{ uri: item.post?.files?.[0]?.url! }} className='h-20 w-20 rounded-lg' />
+            <View className='gap-y-1 justify-center'>
+              <Text className='text-white font-bold text-xl' numberOfLines={1} ellipsizeMode='tail'>{item.post?.tittle}</Text>
+              <Text className='text-white font-light text-sm,' numberOfLines={1} ellipsizeMode='tail'>{parts.map(renderPart)}</Text>
+              <Text className='text-white font-light text-sm,' numberOfLines={1} ellipsizeMode='tail'>{item.post.fromNow}</Text>
+            </View>
+          </Pressable>
+        )
+      }}
+    />
   )
 }
 
