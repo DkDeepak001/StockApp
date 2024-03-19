@@ -8,9 +8,10 @@ const kafka = new Kafka({
 
 const p = kafka.producer()
 
-type SendHashTagParam = {
+export type SendHashTagParam = {
   data: {
-    message: string
+    postId: string
+    description: string
   }
 }
 

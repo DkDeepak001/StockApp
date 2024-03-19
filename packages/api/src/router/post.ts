@@ -36,7 +36,8 @@ export const postRouter = createTRPCRouter({
       )
       await sendHashTag({
         data: {
-          message: input.content
+          postId: post[0]?.postId!,
+          description: input.content
         }
       })
       return {

@@ -13,7 +13,6 @@ const poppins = Poppins({
 });
 
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
-  console.log("calling================")
   return (
     <ClerkProvider {...pageProps}>
       <div className={`${poppins.variable} font-Poppins`}>
