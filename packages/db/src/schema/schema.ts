@@ -5,10 +5,6 @@ import { integer, pgTable, text, timestamp, varchar, pgEnum, primaryKey, uniqueI
 export const users = pgTable("users", {
   id: text("id"),
   userId: text("userId").unique().notNull().primaryKey(),
-  userName: text('userName').notNull(),
-  firstName: text('fistName'),
-  lastName: text('lastName'),
-  imgUrl: text('imgUrl').notNull(),
   createdAt: timestamp('createdAt').defaultNow()
 })
 
@@ -18,7 +14,6 @@ export const usersRelations = relations(users, ({ many }) => ({
   comments: many(comments),
   intrests: many(userToHashTag),
   follwers: many(following),
-  following: many(following)
 }))
 
 
@@ -186,8 +181,4 @@ export const followingRelations = relations(following, ({ one }) => ({
     fields: [following.followingId],
     references: [users.userId]
   }),
-  following: one(users, {
-    fields: [following.followerId],
-    references: [users.userId]
-  })
 }))

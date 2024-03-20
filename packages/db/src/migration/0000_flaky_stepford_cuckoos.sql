@@ -67,10 +67,6 @@ CREATE TABLE IF NOT EXISTS "userIntrests" (
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" text,
 	"userId" text PRIMARY KEY NOT NULL,
-	"userName" text NOT NULL,
-	"fistName" text,
-	"lastName" text,
-	"imgUrl" text NOT NULL,
 	"createdAt" timestamp DEFAULT now(),
 	CONSTRAINT "users_userId_unique" UNIQUE("userId")
 );

@@ -1,5 +1,5 @@
 {
-  "id": "7f9963bd-c7f8-4cc8-9d3a-e85a7578e5cb",
+  "id": "30a75522-2918-4bd2-bfb3-1ddc6dde71ca",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -402,30 +402,6 @@
           "name": "userId",
           "type": "text",
           "primaryKey": true,
-          "notNull": true
-        },
-        "userName": {
-          "name": "userName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "fistName": {
-          "name": "fistName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "lastName": {
-          "name": "lastName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "imgUrl": {
-          "name": "imgUrl",
-          "type": "text",
-          "primaryKey": false,
           "notNull": true
         },
         "createdAt": {

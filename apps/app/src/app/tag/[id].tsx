@@ -39,7 +39,6 @@ const Tags = () => {
       onRefresh={refetch}
       renderItem={({ item }) => {
         const { parts } = parseValue(item.post?.description!, [{ trigger: "#" }])
-
         return (
           <Pressable className='flex flex-row gap-x-4 w-full px-10'
             onPress={() => router.push(`/post/${item.postId}`)}
