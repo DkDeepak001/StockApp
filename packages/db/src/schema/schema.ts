@@ -5,6 +5,10 @@ import { integer, pgTable, text, timestamp, varchar, pgEnum, primaryKey, uniqueI
 export const users = pgTable("users", {
   id: text("id"),
   userId: text("userId").unique().notNull().primaryKey(),
+  userName: text('userName').notNull(),
+  firstName: text('fistName'),
+  lastName: text('lastName'),
+  imgUrl: text('imgUrl').notNull(),
   createdAt: timestamp('createdAt').defaultNow()
 })
 
@@ -12,7 +16,9 @@ export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
   reactions: many(reactions),
   comments: many(comments),
-  intrests: many(userToHashTag)
+  intrests: many(userToHashTag),
+  follwers: many(following),
+  following: many(following)
 }))
 
 
@@ -161,5 +167,27 @@ export const filesRelation = relations(files, ({ one }) => ({
   post: one(posts, {
     references: [posts.id],
     fields: [files.postId]
+  })
+}))
+
+
+
+export const following = pgTable('following', {
+  id: text('id').primaryKey(),
+  followerId: text('id').notNull(),
+  followingId: text('id').notNull()
+}, (t) => ({
+  unq: uniqueIndex().on(t.followerId, t.followingId)
+}))
+
+
+export const followingRelations = relations(following, ({ one }) => ({
+  follwers: one(users, {
+    fields: [following.followingId],
+    references: [users.userId]
+  }),
+  following: one(users, {
+    fields: [following.followerId],
+    references: [users.userId]
   })
 }))

@@ -1,5 +1,5 @@
 {
-  "id": "f356aecc-62a4-4e03-9e82-258d355658cb",
+  "id": "7f9963bd-c7f8-4cc8-9d3a-e85a7578e5cb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -114,6 +114,31 @@
         }
       }
     },
+    "following": {
+      "name": "following",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "following_id_id_index": {
+          "name": "following_id_id_index",
+          "columns": [
+            "id",
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "hashTag": {
       "name": "hashTag",
       "schema": "",
@@ -128,7 +153,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -377,6 +402,30 @@
           "name": "userId",
           "type": "text",
           "primaryKey": true,
+          "notNull": true
+        },
+        "userName": {
+          "name": "userName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fistName": {
+          "name": "fistName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastName": {
+          "name": "lastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imgUrl": {
+          "name": "imgUrl",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "createdAt": {
