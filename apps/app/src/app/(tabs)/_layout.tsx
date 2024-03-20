@@ -42,7 +42,19 @@ export default function TabLayout() {
       <Tabs.Screen
         name="news"
         options={{
+          headerShown: true,
           tabBarIcon: ({ color }) => <TabBarIcon name="tag" color={color} />,
+          title: "News",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitleStyle: {
+            fontSize: 22,
+            color: "white",
+            paddingHorizontal: 6,
+          }
+
         }}
       />
       <Tabs.Screen
