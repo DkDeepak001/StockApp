@@ -83,12 +83,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="profile"
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
