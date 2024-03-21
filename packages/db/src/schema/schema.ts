@@ -5,6 +5,10 @@ import { integer, pgTable, text, timestamp, varchar, pgEnum, primaryKey, uniqueI
 export const users = pgTable("users", {
   id: text("id"),
   userId: text("userId").unique().notNull().primaryKey(),
+  userName: text('userName').notNull(),
+  firstName: text("firstName"),
+  lastName: text("lastName"),
+  imgUrl: text("imgUrl").notNull(),
   createdAt: timestamp('createdAt').defaultNow()
 })
 

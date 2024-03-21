@@ -1,6 +1,6 @@
 {
-  "id": "4b121ba6-9137-4b01-b281-6a08c3ee3bcb",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "876171b0-3a88-449c-a51e-9477af8d6f94",
+  "prevId": "d655a5ba-eec2-4af4-a19e-ca221126615b",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -403,6 +403,32 @@
           "type": "text",
           "primaryKey": true,
           "notNull": true
+        },
+        "userName": {
+          "name": "userName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": null
+        },
+        "firstName": {
+          "name": "firstName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastName": {
+          "name": "lastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imgUrl": {
+          "name": "imgUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": null
         },
         "createdAt": {
           "name": "createdAt",
