@@ -7,22 +7,24 @@ import {
   parseValue,
   isMentionPartType,
 } from 'react-native-controlled-mentions';
-import { router } from 'expo-router';
+import { router, useSegments, } from 'expo-router';
 
 type PostDetailsProps = Pick<PostProps, 'tittle' | "description">
 
 const PostDetails = ({ description, tittle }: PostDetailsProps) => {
   const { parts } = parseValue(description!, [{ trigger: "#" }])
+  const segement = useSegments()[0]
   return (
     <View className='flex flex-col gap-y-1 px-4 pb-4'>
       <Text className='font-bold text-xl text-white'>{tittle}</Text>
-      <Text className='font-normal text-sm text-white'>{parts.map(renderPart)}</Text>
+      <Text className='font-normal text-sm text-white'>{parts.map((p, i) => renderPart(p, i, segement!))}</Text>
     </View>
   )
 }
 export const renderPart = (
   part: Part,
   index: number,
+  segement: string
 ) => {
   if (!part.partType) {
     return <Text key={index}>{part.text}</Text>;
@@ -35,10 +37,11 @@ export const renderPart = (
         style={part.partType.textStyle, {
           color: "blue"
         }}
-        onPress={() => router.push(`/tag/${part.data?.id!}`)}
+        onPress={() => segement === "(tabs)" && router.push(`/tag/${part.data?.id!}`)
+        }
       >
         {part.text}
-      </Text>
+      </Text >
     );
   }
   return (

@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, FlatList, Pressable } from 'react-native'
 import React, { useEffect } from 'react'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation, useSegments } from 'expo-router'
 import { api } from '~/utils/api'
 import { StockDetails, HashtagDetails } from '~/components/hashtag/header'
 import { Image } from 'expo-image'
@@ -11,6 +11,7 @@ const Tags = () => {
   const { id } = useLocalSearchParams()
   const navigation = useNavigation()
   const { data: tag, isLoading, refetch, isRefetching, isInitialLoading } = api.hashTag.byId.useQuery({ id: id as string })
+  const segement = useSegments()[0]
 
   useEffect(() => {
     navigation.setOptions({
@@ -46,7 +47,7 @@ const Tags = () => {
             <Image source={{ uri: item.post?.files?.[0]?.url! }} className='h-20 w-20 rounded-lg' />
             <View className='gap-y-1 justify-center'>
               <Text className='text-white font-bold text-xl' numberOfLines={1} ellipsizeMode='tail'>{item.post?.tittle}</Text>
-              <Text className='text-white font-light text-sm,' numberOfLines={1} ellipsizeMode='tail'>{parts.map(renderPart)}</Text>
+              <Text className='text-white font-light text-sm,' numberOfLines={1} ellipsizeMode='tail'>{parts.map((p, i) => renderPart(p, i, segement!))}</Text>
               <Text className='text-white font-light text-sm,' numberOfLines={1} ellipsizeMode='tail'>{item.post.fromNow}</Text>
             </View>
           </Pressable>
