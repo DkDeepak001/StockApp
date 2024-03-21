@@ -178,8 +178,8 @@ export const filesRelation = relations(files, ({ one }) => ({
 
 export const following = pgTable('following', {
   id: text('id').primaryKey(),
-  followerId: text('id').notNull(),
-  followingId: text('id').notNull()
+  followerId: text('followerId').default(''),
+  followingId: text('followingId').default('')
 }, (t) => ({
   unq: uniqueIndex().on(t.followerId, t.followingId)
 }))

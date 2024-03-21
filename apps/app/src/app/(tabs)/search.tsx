@@ -37,7 +37,7 @@ const Search = () => {
 type SearchuserProps = ArrayElement<NonNullable<ReturnType<ReturnType<typeof api.useUtils>['user']['search']['getData']>>>
 const Searchuser = (user: SearchuserProps) => {
   return (
-    <Pressable className=' flex flex-row items-center gap-x-3' onPress={() => router.push(`/profile/${user.userId}`)}>
+    <Pressable className=' flex flex-row items-center gap-x-3  mb-2' onPress={() => router.push(`/profile/${user.userId}`)}>
       <Image source={{ uri: user.imgUrl }} className='w-10 h-10 rounded-full' />
       <Text className='text-white w-full font-bold text-xl'>{user.userName}</Text>
     </Pressable>

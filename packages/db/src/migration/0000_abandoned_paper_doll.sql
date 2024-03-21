@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS "file" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "following" (
-	"id" text NOT NULL
+	"id" text PRIMARY KEY NOT NULL,
+	"followerId" text DEFAULT '',
+	"followingId" text DEFAULT ''
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "hashTag" (
@@ -67,11 +69,15 @@ CREATE TABLE IF NOT EXISTS "userIntrests" (
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" text,
 	"userId" text PRIMARY KEY NOT NULL,
+	"userName" text NOT NULL,
+	"firstName" text,
+	"lastName" text,
+	"imgUrl" text NOT NULL,
 	"createdAt" timestamp DEFAULT now(),
 	CONSTRAINT "users_userId_unique" UNIQUE("userId")
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX IF NOT EXISTS "following_id_id_index" ON "following" ("id","id");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "following_followerId_followingId_index" ON "following" ("followerId","followingId");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "reactions_postId_userId_index" ON "reactions" ("postId","userId");--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "postToHashTag" ADD CONSTRAINT "postToHashTag_postId_posts_id_fk" FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE no action ON UPDATE no action;

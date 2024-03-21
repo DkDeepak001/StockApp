@@ -1,5 +1,5 @@
 {
-  "id": "4b121ba6-9137-4b01-b281-6a08c3ee3bcb",
+  "id": "2165e3bd-5b54-43ca-a457-026e64f147f7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -121,16 +121,30 @@
         "id": {
           "name": "id",
           "type": "text",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
+        },
+        "followerId": {
+          "name": "followerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
+        "followingId": {
+          "name": "followingId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
         }
       },
       "indexes": {
-        "following_id_id_index": {
-          "name": "following_id_id_index",
+        "following_followerId_followingId_index": {
+          "name": "following_followerId_followingId_index",
           "columns": [
-            "id",
-            "id"
+            "followerId",
+            "followingId"
           ],
           "isUnique": true
         }
@@ -402,6 +416,30 @@
           "name": "userId",
           "type": "text",
           "primaryKey": true,
+          "notNull": true
+        },
+        "userName": {
+          "name": "userName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "firstName": {
+          "name": "firstName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastName": {
+          "name": "lastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imgUrl": {
+          "name": "imgUrl",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "createdAt": {

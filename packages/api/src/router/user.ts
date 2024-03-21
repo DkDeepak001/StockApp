@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { clerkClient } from "@clerk/nextjs";
 import { ReturnUserType } from "./post";
-import { eq, like } from "drizzle-orm";
+import { and, eq, like } from "drizzle-orm";
 import { schema } from "@stockHub/db";
 import { FollowingApiInput } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
@@ -32,10 +32,14 @@ export const userRouter = createTRPCRouter({
         followerId: ctx.session.userId,
         followingId: input.followingId
       })
-      console.log(follow)
       return follow
     } catch (error) {
+      //@ts-ignore
+      if (error.toString().includes("duplicate key value violates unique constraint")) {
+        await ctx.db.delete(schema.following).where(and(eq(schema.following.followerId, ctx.session.userId), eq(schema.following.followingId, input.followingId)))
+      }
       console.log(error)
+      return error
     }
   }),
   search: protectedProcedure.input(z.object({
