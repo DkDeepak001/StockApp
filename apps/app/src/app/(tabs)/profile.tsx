@@ -1,4 +1,5 @@
 import { useAuth } from "@clerk/clerk-expo";
+import { Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { ProfileHeader } from "~/components/profile/profileHeader";
 import { ProfilePost } from "~/components/profile/profilePost";
@@ -23,6 +24,7 @@ const ProfileScreen = () => {
       className='w-screen '
       ListHeaderComponent={() => <ProfileHeader {...user!} />}
       data={user?.post}
+      ListEmptyComponent={() => <Text className='text-white text-center font-bold text-xl'>{user?.username} doesn't have any post </Text>}
       renderItem={({ item }) => <ProfilePost {...item} />}
     />
 
