@@ -13,7 +13,12 @@ export const usersRelations = relations(users, ({ many }) => ({
   reactions: many(reactions),
   comments: many(comments),
   intrests: many(userToHashTag),
-  follwers: many(following),
+  follwers: many(following, {
+    relationName: "follwers"
+  }),
+  following: many(following, {
+    relationName: "following"
+  })
 }))
 
 
@@ -178,7 +183,13 @@ export const following = pgTable('following', {
 
 export const followingRelations = relations(following, ({ one }) => ({
   follwers: one(users, {
-    fields: [following.followingId],
-    references: [users.userId]
+    fields: [following.followerId],
+    references: [users.userId],
+    relationName: "follwers"
   }),
+  following: one(users, {
+    fields: [following.followingId],
+    references: [users.userId],
+    relationName: "following"
+  })
 }))
