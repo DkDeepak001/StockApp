@@ -6,12 +6,27 @@ import { showMessage } from "react-native-flash-message"
 
 export type ProfileHeaderProps = NonNullable<ReturnType<ReturnType<typeof api.useUtils>['user']['byId']['getData']>>
 export const ProfileHeader = (user: ProfileHeaderProps) => {
-  const { mutateAsync: addFollow, isLoading } = api.user.follow.useMutation()
+  const context = api.useUtils()
+  const { mutateAsync: addFollow, isLoading } = api.user.follow.useMutation({
+
+    onMutate: async () => {
+      await context.user.byId.cancel()
+      context.user.byId.setData({ id: user.id }, (old) => {
+        if (!old) return old
+        return {
+          ...old,
+          hasFollowing: !old.hasFollowing
+        }
+      })
+
+    },
+    onSettled: () => {
+      context.user.byId.invalidate()
+    }
+  })
+
   const handleFollow = async () => {
     try {
-      await addFollow({
-        followingId: user.id
-      })
       const content = user.hasFollowing ? ` Suscessfully unfollowed ${user.username}`
         : ` you are now following ${user.username}`
 
@@ -19,6 +34,10 @@ export const ProfileHeader = (user: ProfileHeaderProps) => {
         type: 'success',
         message: content
       })
+      await addFollow({
+        followingId: user.id
+      })
+
     } catch (error) {
       console.log(error)
       showMessage({
