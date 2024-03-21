@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { clerkClient } from "@clerk/nextjs";
 import { ReturnUserType } from "./post";
-import { eq } from "drizzle-orm";
+import { eq, like } from "drizzle-orm";
 import { schema } from "@stockHub/db";
 import { FollowingApiInput } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
@@ -37,6 +37,12 @@ export const userRouter = createTRPCRouter({
     } catch (error) {
       console.log(error)
     }
-
+  }),
+  search: protectedProcedure.input(z.object({
+    q: z.string()
+  })).query(async ({ input, ctx }) => {
+    if (input.q === '') return []
+    return await ctx.db.select().from(schema.users).where(like(schema.users.userName, `%${input.q}%`));
   })
+
 })

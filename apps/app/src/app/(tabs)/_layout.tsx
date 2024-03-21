@@ -95,7 +95,6 @@ export default function TabLayout() {
           headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: 'black',
-            height: 150
           },
           headerTitleStyle: {
             fontSize: 22,
