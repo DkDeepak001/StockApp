@@ -68,3 +68,7 @@ export const AddCommentApiInput = z.object({
 })
 
 export type ReactPostApiInputType = z.infer<typeof ReactPostApiInput>
+
+export const FollowingApiInput = z.object({
+  followingId: z.string()
+})
