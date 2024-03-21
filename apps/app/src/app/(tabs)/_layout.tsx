@@ -5,6 +5,8 @@ import { Tabs, useRouter } from 'expo-router';
 import { useClientOnlyValue } from '../../components/useClientOnlyValue';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Pressable } from 'react-native';
+import { Image } from 'expo-image';
+import { useAuth, useUser } from '@clerk/clerk-expo';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -17,6 +19,8 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const router = useRouter()
   const insets = useSafeAreaInsets();
+  const { user } = useUser()
+  const { signOut } = useAuth()
 
   return (
     <Tabs
@@ -85,7 +89,22 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          headerShown: true,
+          title: `Profile`,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitleStyle: {
+            fontSize: 22,
+            color: "white",
+            paddingHorizontal: 6,
+          },
+          tabBarIcon: () => <Image source={{ uri: user?.imageUrl }} className='w-6 h-6 rounded-full' />,
+          headerRight: () =>
+            <Pressable className='px-5' onPress={() => signOut()}>
+              <AntDesign name="logout" size={24} color="white" />
+            </Pressable>,
         }}
       />
     </Tabs >
