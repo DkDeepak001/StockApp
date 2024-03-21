@@ -14,15 +14,27 @@ export const userRouter = createTRPCRouter({
     const post = await ctx.db.query.posts.findMany({
       where: eq(schema.posts.authorId, input.id),
       with: {
-        files: true
+        files: true,
       }
 
     })
+    const user = await ctx.db.query.users.findFirst({
+      where: eq(schema.users.userId, input.id),
+      with: {
+        following: true,
+        follwers: true
+      }
+    })
     const userData = await clerkClient.users.getUser(input.id) as ReturnUserType
+
 
     return {
       ...userData,
-      post: post
+      post: post,
+      followers: user?.follwers,
+      follwing: user?.following,
+      hasFollowing: user?.following.map(f => f.followerId).includes(ctx.session.userId)
+
     }
   }),
   follow: protectedProcedure.input(FollowingApiInput).mutation(async ({ input, ctx }) => {

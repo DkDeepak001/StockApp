@@ -12,9 +12,12 @@ export const ProfileHeader = (user: ProfileHeaderProps) => {
       await addFollow({
         followingId: user.id
       })
+      const content = user.hasFollowing ? ` Suscessfully unfollowed ${user.username}`
+        : ` you are now following ${user.username}`
+
       showMessage({
         type: 'success',
-        message: `you are now following ${user.username}`
+        message: content
       })
     } catch (error) {
       console.log(error)
@@ -33,7 +36,7 @@ export const ProfileHeader = (user: ProfileHeaderProps) => {
         <Text className='text-gray-300 font-semibold text-lg'>{user?.firstName} {user?.lastName}</Text>
       </View>
       <Button variants='fill' className='w-6/12 mb-5' onPress={handleFollow} disabled={isLoading}>
-        <Text className='font-bold text-lg'>Follow</Text>
+        <Text className='font-bold text-lg'>{user.hasFollowing ? 'unfollow' : "Follow"}</Text>
       </Button>
     </View>
 
