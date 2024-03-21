@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { useAuth, useUser } from '@clerk/clerk-expo';
+import { BasicInput } from '~/components/commons/textInput';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -63,7 +64,6 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="createPost"
-
         options={{
           tabBarStyle: {
             display: "none"
@@ -86,6 +86,26 @@ export default function TabLayout() {
           }
         }}
       />
+      <Tabs.Screen
+        name="search"
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+          title: "Search",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: 'black',
+            height: 150
+          },
+          headerTitleStyle: {
+            fontSize: 22,
+            color: "white",
+            paddingHorizontal: 6,
+          }
+
+        }}
+      />
+
       <Tabs.Screen
         name="profile"
         options={{
