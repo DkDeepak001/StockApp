@@ -53,6 +53,13 @@ export const RegisterFormScehma = z.object({
   lastName: z.string()
 })
 
+export const RegisterApiInput = RegisterFormScehma.extend({
+  imgUrl: z.string().url(),
+  userId: z.string()
+}).omit({
+  password: true
+})
+
 export type RegisterSchema = z.infer<typeof RegisterFormScehma>
 
 

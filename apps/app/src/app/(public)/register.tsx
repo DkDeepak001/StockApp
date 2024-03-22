@@ -8,17 +8,16 @@ import { Text, View, ScrollView, Pressable } from 'react-native'
 import { showMessage } from 'react-native-flash-message';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
-import PlaceHolderImage from "../../../assets/images/auth/placeholder.png"
 import { useCallback, useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { uploadToS3 } from '~/utils/uploadTos3';
+import { useSignUpStore } from '~/store/signup';
 
 
 
 export default function RegisterScreen() {
   const { signUp } = useSignUp();
-  const { user } = useUser()
-  const [image, setImage] = useState(PlaceHolderImage)
+  const [image, setImage] = useState("https://investorsinsighthub.s3.amazonaws.com/placeholder.png")
+  const setFromPage = useSignUpStore(state => state.setFromPage1)
   const {
     handleSubmit,
     control,
@@ -41,7 +40,7 @@ export default function RegisterScreen() {
       console.log("ImagePickerError: ", res.errorMessage)
     } else {
       if (res.assets) {
-        setImage(res.assets?.[0]?.uri)
+        setImage(res.assets?.[0]?.uri!)
         console.log(res.assets?.[0]?.type)
       }
     }
@@ -58,15 +57,16 @@ export default function RegisterScreen() {
         firstName,
         lastName,
       })
-      const res = await uploadToS3({
-        location: 'profile',
-        fileData: {
-          uri: image,
-          type: "image/png"
-        }
-      })
 
       await signUp?.prepareEmailAddressVerification({ strategy: "email_code" })
+
+      setFromPage({
+        userName: username,
+        lastName,
+        fistName: lastName,
+        email,
+        imgUrl: image
+      })
 
       showMessage({
         message: "verification Email Sent",
@@ -133,6 +133,7 @@ export default function RegisterScreen() {
           control={control}
           placeholder='Password'
           name='password'
+          secureTextEntry={true}
           textContentType='password'
           error={errors.password?.message!}
         />

@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { clerkClient } from "@clerk/nextjs";
 import { ReturnUserType } from "./post";
 import { and, eq, like } from "drizzle-orm";
 import { schema } from "@stockHub/db";
-import { FollowingApiInput } from "@stockHub/validators";
+import { FollowingApiInput, RegisterApiInput } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
 
 export const userRouter = createTRPCRouter({
@@ -59,6 +59,16 @@ export const userRouter = createTRPCRouter({
   })).query(async ({ input, ctx }) => {
     if (input.q === '') return []
     return await ctx.db.select().from(schema.users).where(like(schema.users.userName, `%${input.q}%`));
+  }),
+  add: publicProcedure.input(RegisterApiInput).mutation(async ({ input, ctx }) => {
+    return await ctx.db.insert(schema.users).values({
+      id: uuidv4(),
+      imgUrl: input.imgUrl,
+      userName: input.username,
+      userId: input.userId,
+      lastName: input.lastName,
+      firstName: input.firstName
+    })
   })
 
 })
