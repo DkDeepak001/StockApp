@@ -6,7 +6,17 @@ const PublicLayout = () => {
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: 'black' }
+        headerTitleStyle: {
+          fontSize: 22,
+          color: "white",
+        },
+        headerStyle: {
+          backgroundColor: "black"
+        },
+        contentStyle: {
+          backgroundColor: 'black',
+        }
+
       }}>
       <Stack.Screen
         name="onboarding"
@@ -17,11 +27,13 @@ const PublicLayout = () => {
       <Stack.Screen
         name="login"
         options={{
-          headerTitle: 'Clerk Auth App',
+          headerShown: true,
+          headerTitle: 'Login',
         }} />
       <Stack.Screen
         name="register"
         options={{
+          headerShown: true,
           headerTitle: 'Create Account',
         }} />
       <Stack.Screen

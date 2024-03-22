@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { showMessage } from 'react-native-flash-message';
 import LoginImage from "../../../assets/images/auth/login.png"
 import { Image } from 'expo-image';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function LoginScreen() {
   let router = useRouter()
@@ -75,7 +76,12 @@ export default function LoginScreen() {
 
 
   return (
-    <SafeAreaView className="flex-1 items-center justify-center">
+    <ScrollView className=' my-6' contentContainerStyle={{
+      flexGrow: 1,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
       <View className="w-full h-2/5 ">
         <Image source={LoginImage} className="w-full h-full " />
       </View>
@@ -91,12 +97,13 @@ export default function LoginScreen() {
         control={control}
         error={errors.password?.message!}
         name='password'
+        secureTextEntry={true}
         textContentType='password'
       />
       <Button variants='fill' onPress={handleSubmit(handleLogin)}>
         <Text className="text-black font-bold text-lg tracking-wider uppercase">Login</Text>
       </Button>
-    </SafeAreaView >
+    </ScrollView >
   );
 }
 

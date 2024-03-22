@@ -1,4 +1,4 @@
-import { useSignUp } from '@clerk/clerk-expo';
+import { useSignUp, useUser } from '@clerk/clerk-expo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormScehma, RegisterSchema } from '@stockHub/validators';
 import { Image } from 'expo-image';
@@ -8,8 +8,7 @@ import { Text, View, ScrollView } from 'react-native'
 import { showMessage } from 'react-native-flash-message';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
-import RegisterImage from "../../../assets/images/auth/register.png"
-import { SafeAreaView } from 'react-native-safe-area-context';
+import PlaceHolderImage from "../../../assets/images/auth/placeholder.png"
 
 
 export default function RegisterScreen() {
@@ -28,7 +27,7 @@ export default function RegisterScreen() {
         emailAddress: email,
         username,
         firstName,
-        lastName
+        lastName,
       })
       await signUp?.prepareEmailAddressVerification({ strategy: "email_code" })
 
@@ -54,61 +53,55 @@ export default function RegisterScreen() {
   }
 
   return (
-    <SafeAreaView className='flex-1 items-center justify-center'>
-      <View className="w-full h-80 ">
-        <Image source={RegisterImage} className="w-full h-full " contentFit='contain' />
-      </View>
-      <View className='flex-1 w-full items-center justify-center'>
-        <ScrollView className='w-full'
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <FormInput
-            control={control}
-            placeholder='First Name'
-            name='firstName'
-            autoComplete='off'
-            error={errors.firstName?.message!}
-          />
-          <FormInput
-            control={control}
-            placeholder='Last Name'
-            name='lastName'
-            autoComplete='off'
-            error={errors.lastName?.message!}
-          />
-          <FormInput
-            control={control}
-            placeholder='Username'
-            name='username'
-            error={errors.username?.message!}
-          />
-          <FormInput
-            control={control}
-            placeholder='Email Id'
-            name='email'
-            textContentType='emailAddress'
-            error={errors.email?.message!}
-          />
-          <FormInput
-            control={control}
-            placeholder='Password'
-            name='password'
-            textContentType='password'
-            error={errors.password?.message!}
-          />
-          <Button variants='fill' onPress={handleSubmit(handleReg)}>
-            <Text className='text-black font-bold text-lg tracking-wider uppercase'>Register</Text>
-          </Button>
-        </ScrollView >
-      </View>
-
-    </SafeAreaView>
-
+    <View className='flex-1 w-full items-center justify-center'>
+      <ScrollView className='w-full'
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Image source={PlaceHolderImage} className=" h-28 w-28 rounded-full mb-14 border-2 p-2 border-white" contentFit='contain' />
+        <FormInput
+          control={control}
+          placeholder='First Name'
+          name='firstName'
+          autoComplete='off'
+          error={errors.firstName?.message!}
+        />
+        <FormInput
+          control={control}
+          placeholder='Last Name'
+          name='lastName'
+          autoComplete='off'
+          error={errors.lastName?.message!}
+        />
+        <FormInput
+          control={control}
+          placeholder='Username'
+          name='username'
+          error={errors.username?.message!}
+        />
+        <FormInput
+          control={control}
+          placeholder='Email Id'
+          name='email'
+          textContentType='emailAddress'
+          error={errors.email?.message!}
+        />
+        <FormInput
+          control={control}
+          placeholder='Password'
+          name='password'
+          textContentType='password'
+          error={errors.password?.message!}
+        />
+        <Button variants='fill' onPress={handleSubmit(handleReg)}>
+          <Text className='text-black font-bold text-lg tracking-wider uppercase'>Register</Text>
+        </Button>
+      </ScrollView >
+    </View>
   );
 }
 
