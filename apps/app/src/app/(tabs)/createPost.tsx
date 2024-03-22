@@ -13,8 +13,6 @@ import { type FlashList } from "@shopify/flash-list"
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 import { Button } from "~/components/commons/button"
 import { useSelectedImages } from "~/store/post";
-import { scheduleFlushOperations } from "react-native-gesture-handler/lib/typescript/handlers/gestureHandlerCommon";
-import Loader from "~/components/commons/loader";
 
 export type UpdateEditImageProps = Pick<Asset, "height" | "width" | "uri">
 

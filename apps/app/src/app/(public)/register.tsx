@@ -4,15 +4,21 @@ import { RegisterFormScehma, RegisterSchema } from '@stockHub/validators';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, ScrollView, Pressable } from 'react-native'
 import { showMessage } from 'react-native-flash-message';
 import { Button } from '~/components/commons/button';
 import { FormInput } from '~/components/commons/textInput';
 import PlaceHolderImage from "../../../assets/images/auth/placeholder.png"
+import { useCallback, useState } from 'react';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { uploadToS3 } from '~/utils/uploadTos3';
+
 
 
 export default function RegisterScreen() {
   const { signUp } = useSignUp();
+  const { user } = useUser()
+  const [image, setImage] = useState(PlaceHolderImage)
   const {
     handleSubmit,
     control,
@@ -20,6 +26,29 @@ export default function RegisterScreen() {
   } = useForm<RegisterSchema>({
     resolver: zodResolver(RegisterFormScehma)
   })
+
+
+  const openImagePicker = useCallback(async () => {
+    const res = await launchImageLibrary({
+      quality: 1,
+      selectionLimit: 1,
+      mediaType: "photo",
+      includeBase64: false,
+    })
+    if (res.didCancel) {
+      console.log("User cancelled")
+    } else if (res.errorCode) {
+      console.log("ImagePickerError: ", res.errorMessage)
+    } else {
+      if (res.assets) {
+        setImage(res.assets?.[0]?.uri)
+        console.log(res.assets?.[0]?.type)
+      }
+    }
+  }, [])
+
+
+
   const handleReg = async ({ password, username, lastName, firstName, email }: RegisterSchema) => {
     try {
       await signUp?.create({
@@ -29,6 +58,14 @@ export default function RegisterScreen() {
         firstName,
         lastName,
       })
+      const res = await uploadToS3({
+        location: 'profile',
+        fileData: {
+          uri: image,
+          type: "image/png"
+        }
+      })
+
       await signUp?.prepareEmailAddressVerification({ strategy: "email_code" })
 
       showMessage({
@@ -62,7 +99,9 @@ export default function RegisterScreen() {
           alignItems: "center"
         }}
       >
-        <Image source={PlaceHolderImage} className=" h-28 w-28 rounded-full mb-14 border-2 p-2 border-white" contentFit='contain' />
+        <Pressable onPress={openImagePicker}>
+          <Image source={image} className=" h-28 w-28 rounded-full mb-14 border-2 p-2 border-white" contentFit='cover' />
+        </Pressable>
         <FormInput
           control={control}
           placeholder='First Name'
