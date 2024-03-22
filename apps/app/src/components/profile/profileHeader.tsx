@@ -3,9 +3,11 @@ import { Text, View } from "react-native"
 import { api } from "~/utils/api"
 import { Button } from "../commons/button"
 import { showMessage } from "react-native-flash-message"
+import { useUser } from "@clerk/clerk-expo"
 
 export type ProfileHeaderProps = NonNullable<ReturnType<ReturnType<typeof api.useUtils>['user']['byId']['getData']>>
 export const ProfileHeader = (user: ProfileHeaderProps) => {
+  const { user: me } = useUser()
   const context = api.useUtils()
   const { mutateAsync: addFollow, isLoading } = api.user.follow.useMutation({
 
@@ -54,9 +56,10 @@ export const ProfileHeader = (user: ProfileHeaderProps) => {
         <Text className='text-white font-bold text-xl'>@{user?.username}</Text>
         <Text className='text-gray-300 font-semibold text-lg'>{user?.firstName} {user?.lastName}</Text>
       </View>
-      <Button variants='fill' className='w-6/12 mb-5' onPress={handleFollow} disabled={isLoading}>
-        <Text className='font-bold text-lg'>{user.hasFollowing ? 'unfollow' : "Follow"}</Text>
-      </Button>
+      {me?.id !== user.id &&
+        <Button variants='fill' className='w-6/12 mb-5' onPress={handleFollow} disabled={isLoading}>
+          <Text className='font-bold text-lg'>{user.hasFollowing ? 'unfollow' : "Follow"}</Text>
+        </Button>}
     </View>
 
   )

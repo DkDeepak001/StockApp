@@ -1,13 +1,20 @@
 import { Text, FlatList } from 'react-native'
-import React from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import React, { useEffect } from 'react'
+import { router, useLocalSearchParams } from 'expo-router'
 import { api } from '~/utils/api'
 import Loader from '~/components/commons/loader'
 import { ProfileHeader } from '~/components/profile/profileHeader'
 import { ProfilePost } from '~/components/profile/profilePost'
+import { useUser } from '@clerk/clerk-expo'
 
 const Profile = () => {
   const { id } = useLocalSearchParams()
+  const { user: me } = useUser()
+
+  useEffect(() => {
+    if (id === me?.id) router.push("/profile")
+  }, [])
+
   const { data: user, isLoading } = api.user.byId.useQuery({ id: id as string })
   if (isLoading) {
     return (
