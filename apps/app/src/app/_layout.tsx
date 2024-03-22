@@ -2,14 +2,14 @@
 import { Slot, SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { TRPCProvider } from "~/utils/api";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FlashMessage from "react-native-flash-message";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-
+SplashScreen.preventAutoHideAsync()
 export default function RootLayout() {
   return <RootLayoutNav />;
 }
@@ -34,6 +34,7 @@ const tokenCache = {
 
 function RootLayoutNav() {
   return (
+
     <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
       <TRPCProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -51,20 +52,35 @@ function RootLayoutNav() {
 
 
 const AuthInitalizer = () => {
+
   const { isSignedIn } = useAuth()
   const segment = useSegments()
   const router = useRouter()
 
   useEffect(() => {
-    const isTabGroup = segment[0] === "(auth)"
-    console.log("AuthInitalizer", isSignedIn, isTabGroup, segment)
+    const checkAsyncStorage = async () => {
+      const isTabGroup = segment[0] === "(tabs)";
+      const isFirstTimeUser = !(await AsyncStorage.getItem('hasVisited')); // Use AsyncStorage to check if user has visited before
 
-    if (isSignedIn && !isTabGroup) {
-      router.replace("/(tabs)/feed")
-    } else {
-      router.replace("/onboarding")
-    }
-  }, [isSignedIn])
+      console.log("AuthInitializer", isSignedIn, isTabGroup, segment, isSignedIn, isFirstTimeUser);
+
+      if (isSignedIn !== undefined) {
+        if (isSignedIn && !isTabGroup) {
+          router.replace("/(tabs)/feed");
+        } else if (isFirstTimeUser) {
+          router.replace("/onboarding");
+          await AsyncStorage.setItem('hasVisited', 'true'); // Use AsyncStorage to set the flag
+        } else {
+          router.replace("/authHome"); // Replace 'authHome' with the route for authenticated home page
+        }
+        await SplashScreen.hideAsync()
+      }
+    };
+
+    checkAsyncStorage(); // Call the async function
+  }, [isSignedIn]);
+
+
 
   return <Slot />
 }

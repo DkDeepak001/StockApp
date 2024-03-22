@@ -19,7 +19,6 @@ export default function AuthHome() {
         <Button variants="outline" onPress={() => router.push("/register")}>
           <Text className="text-white font-bold text-lg">Register</Text>
         </Button>
-
       </View>
     </SafeAreaView>
   )

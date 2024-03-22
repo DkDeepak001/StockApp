@@ -121,7 +121,10 @@ export default function TabLayout() {
           },
           tabBarIcon: () => <Image source={{ uri: user?.imageUrl }} className='w-6 h-6 rounded-full' />,
           headerRight: () =>
-            <Pressable className='px-5' onPress={() => signOut()}>
+            <Pressable className='px-5' onPress={() => {
+              router.push("/authHome");
+              signOut()
+            }}>
               <AntDesign name="logout" size={24} color="white" />
             </Pressable>,
         }}
