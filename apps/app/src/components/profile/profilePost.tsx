@@ -4,7 +4,7 @@ import { ProfileHeaderProps } from "./profileHeader"
 import { Image } from "expo-image"
 import { router } from "expo-router"
 
-type ProfilePostProps = ArrayElement<Exclude<ProfileHeaderProps, undefined>['post']>
+type ProfilePostProps = ArrayElement<NonNullable<ProfileHeaderProps['post']>>
 export const ProfilePost = (post: ProfilePostProps) => {
   return (
     <Pressable className='w-[45%] bg-red-100 h-40 rounded-lg' onPress={() => router.push(`/post/${post.id}`)}>

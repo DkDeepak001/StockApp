@@ -1,7 +1,5 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { clerkClient } from "@clerk/nextjs";
-import { ReturnUserType } from "./post";
 import { and, eq, like } from "drizzle-orm";
 import { schema } from "@stockHub/db";
 import { FollowingApiInput, RegisterApiInput } from "@stockHub/validators";
@@ -11,26 +9,24 @@ export const userRouter = createTRPCRouter({
   byId: protectedProcedure.input(z.object({
     id: z.string()
   })).query(async ({ input, ctx }) => {
-    const post = await ctx.db.query.posts.findMany({
-      where: eq(schema.posts.authorId, input.id),
-      with: {
-        files: true,
-      }
-
-    })
     const user = await ctx.db.query.users.findFirst({
       where: eq(schema.users.userId, input.id),
       with: {
+        posts: {
+          with: {
+            files: true
+          }
+        },
         following: true,
         follwers: true
       }
     })
-    const userData = await clerkClient.users.getUser(input.id) as ReturnUserType
+    console.log(user)
 
 
     return {
-      ...userData,
-      post: post,
+      ...user,
+      post: user?.posts,
       followers: user?.follwers,
       follwing: user?.following,
       hasFollowing: user?.following.map(f => f.followerId).includes(ctx.session.userId)

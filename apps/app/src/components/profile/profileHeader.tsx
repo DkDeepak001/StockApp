@@ -13,7 +13,7 @@ export const ProfileHeader = (user: ProfileHeaderProps) => {
 
     onMutate: async () => {
       await context.user.byId.cancel()
-      context.user.byId.setData({ id: user.id }, (old) => {
+      context.user.byId.setData({ id: user.userId! }, (old) => {
         if (!old) return old
         return {
           ...old,
@@ -29,15 +29,15 @@ export const ProfileHeader = (user: ProfileHeaderProps) => {
 
   const handleFollow = async () => {
     try {
-      const content = user.hasFollowing ? ` Suscessfully unfollowed ${user.username}`
-        : ` you are now following ${user.username}`
+      const content = user.hasFollowing ? ` Suscessfully unfollowed ${user.userName}`
+        : ` you are now following ${user.userName}`
 
       showMessage({
         type: 'success',
         message: content
       })
       await addFollow({
-        followingId: user.id
+        followingId: user.userId!
       })
 
     } catch (error) {
@@ -51,12 +51,12 @@ export const ProfileHeader = (user: ProfileHeaderProps) => {
   }
   return (
     <View className='flex gap-y-5 items-center  w-screen '>
-      <Image source={{ uri: user?.imageUrl }} className='w-28 h-28 rounded-full' />
+      <Image source={{ uri: user?.imgUrl }} className='w-28 h-28 rounded-full' />
       <View className='flex items-center'>
-        <Text className='text-white font-bold text-xl'>@{user?.username}</Text>
+        <Text className='text-white font-bold text-xl'>@{user?.userName}</Text>
         <Text className='text-gray-300 font-semibold text-lg'>{user?.firstName} {user?.lastName}</Text>
       </View>
-      {me?.id !== user.id &&
+      {me?.id !== user.userId &&
         <Button variants='fill' className='w-6/12 mb-5' onPress={handleFollow} disabled={isLoading}>
           <Text className='font-bold text-lg'>{user.hasFollowing ? 'unfollow' : "Follow"}</Text>
         </Button>}

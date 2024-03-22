@@ -2,7 +2,6 @@ import { schema } from "@stockHub/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { CreatePostApi, ReactPostApiInput } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
-import { clerkClient } from '@clerk/nextjs';
 import { User } from "@clerk/nextjs/dist/types/server";
 import moment from "moment";
 import { eq, and, sql } from 'drizzle-orm'
@@ -63,26 +62,6 @@ export const postRouter = createTRPCRouter({
         where: eq(schema.reactions.userId, ctx.auth.userId!)
       })
 
-      const userIds = posts.map(p => p.authorId);
-      const users = await clerkClient.users.getUserList({ userId: userIds });
-
-      const userData: { [userId: string]: ReturnUserType } = {};
-
-      users.map((u) => {
-        if (!userData[u.id]) {
-          userData[u.id] = {
-            imageUrl: u.imageUrl,
-            id: u.id,
-            hasImage: u.hasImage,
-            gender: u.gender,
-            username: u.username,
-            firstName: u.firstName,
-            lastName: u.lastName,
-            emailAddresses: u.emailAddresses,
-            publicMetadata: u.publicMetadata
-          }
-        }
-      })
       return posts.map((post) => {
         const fromNow = moment(post.createdAt!).fromNow()
         const hasReacted = reactions.find((r) => r.postId === post.id)
@@ -90,7 +69,6 @@ export const postRouter = createTRPCRouter({
           ...post,
           fromNow,
           hasReacted: hasReacted?.type,
-          author: userData[post.authorId],
         }
       })
 
@@ -173,23 +151,10 @@ export const postRouter = createTRPCRouter({
     const reaction = await ctx.db.query.reactions.findFirst({
       where: and(eq(schema.reactions.postId, post?.id!), eq(schema.reactions.userId, ctx.auth.userId!))
     })
-
-    const u: ReturnUserType = await clerkClient.users.getUser(post.authorId)
     return {
       ...post,
       hasReacted: reaction?.type,
       fromNow: moment(post.createdAt!).fromNow() ?? '',
-      author: {
-        imageUrl: u.imageUrl,
-        id: u.id,
-        hasImage: u.hasImage,
-        gender: u.gender,
-        username: u.username,
-        firstName: u.firstName,
-        lastName: u.lastName,
-        emailAddresses: u.emailAddresses,
-        publicMetadata: u.publicMetadata
-      } as ReturnUserType
     }
   })
 

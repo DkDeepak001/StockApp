@@ -37,7 +37,7 @@ const Profile = () => {
       className='w-screen '
       ListHeaderComponent={() => <ProfileHeader {...user!} />}
       data={user?.post}
-      ListEmptyComponent={() => <Text className='text-white text-center font-bold text-xl'>{user?.username} doesn't have any post </Text>}
+      ListEmptyComponent={() => <Text className='text-white text-center font-bold text-xl'>{user?.userName} doesn't have any post </Text>}
       renderItem={({ item }) => <ProfilePost {...item} />}
     />
   )

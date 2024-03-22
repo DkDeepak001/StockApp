@@ -4,8 +4,6 @@ import { AddCommentApiInput } from "@stockHub/validators";
 import { v4 as uuidv4 } from 'uuid';
 import { z } from "zod";
 import { eq } from "drizzle-orm";
-import { clerkClient } from "@clerk/nextjs";
-import { ReturnUserType } from "./post";
 import moment from "moment";
 
 export const commentRouter = createTRPCRouter({
@@ -21,33 +19,17 @@ export const commentRouter = createTRPCRouter({
     id: z.string()
   })).query(async ({ input, ctx }) => {
     const comments = await ctx.db.query.comments.findMany({
+      with: {
+        user: true
+      },
       where: eq(schema.comments.postId, input.id),
       orderBy: (comments, { asc, desc }) => [desc(comments.createdAt)]
-    })
-    const users = await clerkClient.users.getUserList({ userId: comments.map(c => c.userId) })
-    const userData: { [userId: string]: ReturnUserType } = {};
-
-    users.map((u) => {
-      if (!userData[u.id]) {
-        userData[u.id] = {
-          imageUrl: u.imageUrl,
-          id: u.id,
-          hasImage: u.hasImage,
-          gender: u.gender,
-          username: u.username,
-          firstName: u.firstName,
-          lastName: u.lastName,
-          emailAddresses: u.emailAddresses,
-          publicMetadata: u.publicMetadata
-        }
-      }
     })
     return comments.map((comment) => {
       const fromNow = moment(comment.createdAt!).fromNow()
       return {
         ...comment,
         fromNow,
-        author: userData[comment.userId]
       }
 
     })

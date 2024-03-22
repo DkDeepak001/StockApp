@@ -46,7 +46,7 @@ export default function AuthHome() {
         username: state.userName,
         imgUrl: imageData?.location ?? state.imgUrl,
         email: state.email,
-        userId: completeSignUp.id!
+        userId: signUp.createdUserId!
       })
 
 
