@@ -7,7 +7,7 @@ import PostAction from '../post/postAction';
 import PostUserDetails from '../post/postUserDetails';
 
 
-export type PostProps = NonNullable<ArrayElement<Exclude<ReturnType<ReturnType<typeof api.useUtils>['post']['all']['getData']>, undefined>>> | NonNullable<ReturnType<ReturnType<typeof api.useUtils>['post']['byId']['getData']>>;
+export type PostProps = NonNullable<ArrayElement<Exclude<ReturnType<ReturnType<typeof api.useUtils>['post']['all']['getData']>, undefined>['posts']>> | NonNullable<ReturnType<ReturnType<typeof api.useUtils>['post']['byId']['getData']>>;
 
 
 export type ArrayElement<ArrayType extends readonly unknown[]> =

@@ -7,7 +7,7 @@ import moment from "moment";
 import { eq, and, sql } from 'drizzle-orm'
 import { z } from "zod";
 import { sendHashTag } from "../utils/kafka";
-
+import { withCursorPagination } from 'drizzle-pagination'
 type InsertFiles = typeof schema.files.$inferInsert
 
 export const postRouter = createTRPCRouter({
@@ -48,29 +48,43 @@ export const postRouter = createTRPCRouter({
     }
   }),
 
-  all: protectedProcedure.query(async ({ ctx }) => {
+  all: protectedProcedure.input(z.object({
+    cursor: z.string().nullish(),
+    limit: z.number().min(0).max(50).default(5)
+  })).query(async ({ ctx, input }) => {
     try {
       const posts = await ctx.db.query.posts.findMany({
+        ...withCursorPagination({
+          limit: input.limit,
+          cursors: [[
+            schema.posts.createdAt,
+            'desc',
+            input.cursor ? new Date(input.cursor) : undefined
+          ]]
+        }),
         with: {
           files: true,
-          author: true,
-        },
-        orderBy: (posts, { desc }) => [desc(posts.createdAt)],
-      });
+          author: true
+        }
+      }
+      );
 
       const reactions = await ctx.db.query.reactions.findMany({
         where: eq(schema.reactions.userId, ctx.auth.userId!)
       })
 
-      return posts.map((post) => {
-        const fromNow = moment(post.createdAt!).fromNow()
-        const hasReacted = reactions.find((r) => r.postId === post.id)
-        return {
-          ...post,
-          fromNow,
-          hasReacted: hasReacted?.type,
-        }
-      })
+      return {
+        nextCursor: posts.length ? posts[posts.length - 1]?.createdAt?.toISOString() : null,
+        posts: posts.map((post) => {
+          const fromNow = moment(post.createdAt!).fromNow()
+          const hasReacted = reactions.find((r) => r.postId === post.id)
+          return {
+            ...post,
+            fromNow,
+            hasReacted: hasReacted?.type,
+          }
+        })
+      }
 
     } catch (error) {
       console.log(error)

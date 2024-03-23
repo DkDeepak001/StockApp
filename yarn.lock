@@ -5654,6 +5654,11 @@ drizzle-orm@^0.29.3:
   resolved "https://registry.yarnpkg.com/drizzle-orm/-/drizzle-orm-0.29.3.tgz#a9b9beb235bbdf9100e62432390cadbee95345cf"
   integrity sha512-uSE027csliGSGYD0pqtM+SAQATMREb3eSM/U8s6r+Y0RFwTKwftnwwSkqx3oS65UBgqDOM0gMTl5UGNpt6lW0A==
 
+drizzle-pagination@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/drizzle-pagination/-/drizzle-pagination-1.0.10.tgz#e4fe2539dde5a7ebc79ee44b925ca52879a96492"
+  integrity sha512-4n811FkmQukhDs9y91sK5nRNPnK1cH+soLmw84rwpJHPJjkFr6zD/f8+UHRv9mldoA/mq1JihMpE3/Lz6h6INA==
+
 drizzle-zod@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/drizzle-zod/-/drizzle-zod-0.5.1.tgz#4e5efe016dce22ed01063f72f839b07670b2d11e"
