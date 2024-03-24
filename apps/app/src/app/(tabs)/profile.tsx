@@ -12,7 +12,7 @@ const ProfileScreen = () => {
     <FlatList
       contentContainerStyle={{
         alignItems: 'center',
-        gap: 5
+        gap: 2
       }}
       columnWrapperStyle={{
         justifyContent: "space-evenly",

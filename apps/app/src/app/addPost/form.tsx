@@ -92,7 +92,7 @@ const FormScreen = () => {
           layout={layout!}
           setLayout={(l: LayoutRectangle) => setLayout(l)}
         />
-        <Button variants="fill" onPress={handleSubmit(handlePost)} >
+        <Button variants="fill" onPress={handleSubmit(handlePost)} className="mt-10" >
           <Text className="font-extrabold text-lg uppercase">Post</Text>
         </Button>
       </View>

@@ -78,16 +78,18 @@ export const MentionInput = ({ value, layout, setLayout, ...props }: MentionInpu
       value={value}
       onLayout={(e) => setLayout(e.nativeEvent.layout)}
       style={{
+        height: "100%",
         paddingHorizontal: 16,
         paddingTop: 16,
         color: "white",
         fontWeight: "700"
       }}
       containerStyle={{
-        height: 400,
+        height: 300,
         width: "85%",
         backgroundColor: '#27272a',
         borderRadius: 16
+
       }}
       placeholderTextColor="gray"
       placeholder="Description"

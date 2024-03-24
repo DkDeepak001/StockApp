@@ -14,8 +14,9 @@ const Tags = () => {
   const segement = useSegments()[0]
 
   useEffect(() => {
+    if (!tag) return
     navigation.setOptions({
-      title: tag?.name?.[0]?.toUpperCase()! + tag?.name?.slice(1)!
+      title: tag?.name?.[0]?.toUpperCase()! + tag?.name?.slice(1)! ?? ""
     })
   }, [])
 
@@ -41,7 +42,7 @@ const Tags = () => {
       renderItem={({ item }) => {
         const { parts } = parseValue(item.post?.description!, [{ trigger: "#" }])
         return (
-          <Pressable className='flex flex-row gap-x-4 w-full px-10'
+          <Pressable className='flex flex-row gap-x-4 w-10/12 px-10'
             onPress={() => router.push(`/post/${item.postId}`)}
           >
             <Image source={{ uri: item.post?.files?.[0]?.url! }} className='h-20 w-20 rounded-lg' />
