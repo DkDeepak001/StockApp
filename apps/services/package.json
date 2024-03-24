@@ -9,6 +9,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
+    "build":"tsc -b",
     "dev": "tsc -b && yarn run with-env nodemon ./dist/index.js",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
