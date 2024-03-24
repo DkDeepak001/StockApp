@@ -41,8 +41,6 @@ function RootLayoutNav() {
           <SafeAreaProvider>
             <AuthInitalizer />
             <FlashMessage position="top" hideStatusBar={false} statusBarHeight={StatusBar.currentHeight} />
-
-
           </SafeAreaProvider>
         </GestureHandlerRootView>
       </TRPCProvider>
