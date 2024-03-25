@@ -10,7 +10,7 @@ type CommentProps = NonNullable<ArrayElement<Exclude<ReturnType<ReturnType<typeo
 const Comment = ({ comment, user, fromNow }: CommentProps) => {
   return (
     <View className='flex flex-row gap-x-3 p-5 pb-3  '>
-      <Image source={{ uri: user.imgUrl }} className='h-9 w-9 rounded-full' />
+      <Image source={{ uri: user.imgUrl ?? '' }} className='h-9 w-9 rounded-full' />
       <View className='flex flex-col gap-y-1'>
         <Text className='text-lg font-black text-white'>{user.userName}{" "}<Text className='font-light text-base'>{" "}{fromNow}</Text>
         </Text>

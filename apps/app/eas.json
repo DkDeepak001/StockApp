@@ -14,6 +14,15 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "store": {
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "resourceClass": "m-medium"
+      }
+    },
     "preview": {
       "extends": "base",
       "distribution": "internal",

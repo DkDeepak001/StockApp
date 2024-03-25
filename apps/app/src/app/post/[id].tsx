@@ -34,7 +34,12 @@ const PostWithComment = () => {
           id: "tempId",
           comment: variable.comment,
           fromNow: "a few second ago",
-          author: user,
+          user: {
+            userName: user?.username,
+            imgUrl: user?.imageUrl,
+            userId: user?.id,
+            id: "tempId"
+          },
           userId: user?.id,
           postId: id as string,
           createdAt: ''

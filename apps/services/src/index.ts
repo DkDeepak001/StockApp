@@ -9,7 +9,7 @@ const kafka = new Kafka({
 
 const c = kafka.consumer();
 
-const apiUrl = 'http://localhost:3000/api/hashtag';
+const apiUrl = `${process.env.APIURL}api/hashtag`;
 
 async function main() {
   try {
@@ -25,9 +25,11 @@ async function main() {
     const mentionRegEx = /\(([-0-9a-fA-F]+)\)/g;
     const hashTagRegEx = /\[([^[\]]+)\]/g;
 
-    messages.forEach(message => {
-      const { postId, description } = JSON.parse(message.value) as messageType['data'];
-      const hashtag: { uuids: string, parsedText: string }[] = [];
+    messages.forEach((message) => {
+      const { postId, description } = JSON.parse(
+        message.value
+      ) as messageType["data"];
+      const hashtag: { uuids: string; parsedText: string }[] = [];
       let match;
 
       // Extract UUIDs
@@ -44,7 +46,7 @@ async function main() {
 
       // Populate the hashtag array
       parsedUUIDs.forEach((uuid, index) => {
-        console.log(uuid, parsedText[index])
+        console.log(uuid, parsedText[index]);
         hashtag.push({ uuids: uuid, parsedText: parsedText[index] });
       });
       parsedResults.push({ postId, hashtag });
@@ -53,7 +55,7 @@ async function main() {
     if (parsedResults.length >= 1) {
       await fetch(apiUrl, {
         method: "POST",
-        body: JSON.stringify(parsedResults)
+        body: JSON.stringify(parsedResults),
       });
     }
   } catch (error) {
@@ -66,8 +68,8 @@ main();
 setInterval(main, 6000);
 
 type parsedResultType = {
-  postId: string,
-  hashtag: { uuids: string, parsedText: string }[]
+  postId: string;
+  hashtag: { uuids: string; parsedText: string }[];
 };
 
 type messageType = {
@@ -76,4 +78,3 @@ type messageType = {
     description: string;
   };
 };
-

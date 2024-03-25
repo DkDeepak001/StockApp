@@ -26,9 +26,9 @@ const getBaseUrl = () => {
   const urlString = Constants.manifest2?.launchAsset.url.split("/");
   const localhost = urlString?.slice(0, 3).join("/");
   if (!localhost) {
-    // return "https://admin.con10tlabs.com";
+    return "https://stock-app-web-eight.vercel.app"
   }
-  //   return "https://admin.con10tlabs.com";
+
   return `http://${urlString?.[2]?.split(":")[0]}:3000`;
 };
 
