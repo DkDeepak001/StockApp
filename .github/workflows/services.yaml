@@ -2,8 +2,8 @@ name: CI/CD
 
 on:
   push:
-    paths: -
-      "apps/services/**"
+    paths: 
+      - "apps/services/**"
 
 jobs:
   build:
