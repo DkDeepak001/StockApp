@@ -19,7 +19,8 @@ async function main() {
       topics: ["hashtag"],
       autoOffsetReset: "earliest",
     });
-    console.log("Received messages", messages);
+    if (messages)
+      console.log("Received messages", messages);
 
     let parsedResults: parsedResultType[] = [];
     const mentionRegEx = /\(([-0-9a-fA-F]+)\)/g;
@@ -64,7 +65,7 @@ async function main() {
 }
 
 main();
-
+console.log("Polling started")
 setInterval(main, 6000);
 
 type parsedResultType = {
